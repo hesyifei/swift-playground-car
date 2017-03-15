@@ -134,6 +134,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
 enum Operation: String {
 	case forward = "f"
 	case backward = "b"
+	case turnLeft = "l"
+	case turnRight = "r"
 }
 
 func controlDevice() {
@@ -141,7 +143,17 @@ func controlDevice() {
 	moveForward(for: 2)
 	moveBackward(for: 1)
 	moveForward(for: 2)
+	turnLeft(for: 0.5)
+	turnRight(for: 2)
 	//#-end-editable-code
+}
+
+func turnLeft(for sec: Double) {
+	move(.turnLeft, for: sec)
+}
+
+func turnRight(for sec: Double) {
+	move(.turnRight, for: sec)
 }
 
 func moveForward(for sec: Double) {
