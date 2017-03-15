@@ -30,6 +30,11 @@
 #define BRAKE 3
 #define RELEASE 4
 
+#define TURN_LEFT 11
+#define TURN_RIGHT 12
+
+// 255
+#define SPEED 200
 
 
 unsigned long previousMillis = 0;        // will store last time data was obtained
@@ -66,6 +71,9 @@ void loop()
     positionData++;
     //Serial.println(positionData);
   }
+
+  //movePos(FORWARD, 10000);
+  //rotate(TURN_LEFT, 10000);
 
 
   // Stores the characters between the start and stop bytes
@@ -115,10 +123,10 @@ void loop()
       movePos(FORWARD, para);
     } else if (cmdChar == 'b') {
       movePos(BACKWARD, para);
-    } else if (cmdChar == 'c') {    // clockwise
-      // to do
-    } else if (cmdChar == 'a') {    // anti-closewise
-      // to do
+    } else if (cmdChar == 'r') {    // turn right
+      rotate(TURN_RIGHT, para);
+    } else if (cmdChar == 'l') {    // turn left
+      rotate(TURN_LEFT, para);
     }
   }
 }
@@ -131,15 +139,38 @@ unsigned int processData(String iStr) {
 }
 
 void movePos(int command, int timeI) {
-  motor(1, command, 255);
-  motor(2, command, 255);
-  motor(3, command, 255);
-  motor(4, command, 255);
+  motor(1, command, SPEED);
+  motor(2, command, SPEED);
+  motor(3, command, SPEED);
+  motor(4, command, SPEED);
   delay(timeI);
-  motor(1, RELEASE, 255);
-  motor(2, RELEASE, 255);
-  motor(3, RELEASE, 255);
-  motor(4, RELEASE, 255);
+  motor(1, RELEASE, 0);
+  motor(2, RELEASE, 0);
+  motor(3, RELEASE, 0);
+  motor(4, RELEASE, 0);
+}
+
+void rotate(int command, int timeI) {
+  switch (command)
+  {
+    case TURN_LEFT:
+      motor(1, BACKWARD, SPEED);
+      motor(2, FORWARD, SPEED);
+      motor(3, FORWARD, SPEED);
+      motor(4, BACKWARD, SPEED);
+      break;
+    case TURN_RIGHT:
+      motor(1, FORWARD, SPEED);
+      motor(2, BACKWARD, SPEED);
+      motor(3, BACKWARD, SPEED);
+      motor(4, FORWARD, SPEED);
+      break;
+  }
+  delay(timeI);
+  motor(1, RELEASE, 0);
+  motor(2, RELEASE, 0);
+  motor(3, RELEASE, 0);
+  motor(4, RELEASE, 0);
 }
 
 
