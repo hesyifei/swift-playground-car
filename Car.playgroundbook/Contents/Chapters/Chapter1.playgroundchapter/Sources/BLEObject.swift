@@ -1,8 +1,13 @@
 import UIKit
 import CoreBluetooth
 
-class BLEData {
-	public static let name = "BT05"
+public class BLEData {
+	/*public static let name = "BT05"
+	public static let serviceUUID = "FFE0"
+	public static let characteristicUUID = "FFE1"*/
+	public static let name = UserDefaults.standard.string(forKey: "bleName") ?? ""
+	public static let serviceUUID = UserDefaults.standard.string(forKey: "bleServiceUUID") ?? ""
+	public static let characteristicUUID = UserDefaults.standard.string(forKey: "bleCharacteristicUUID") ?? ""
 }
 
 // extension didn't work fine
@@ -80,7 +85,7 @@ public class BLEObject: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
 			print("Services count: \(peripheral.services?.count)")
 			for service in services {
 				// CBUUID see data in LightBlue
-				if service.uuid == CBUUID(string: "FFE0") {
+				if service.uuid == CBUUID(string: BLEData.serviceUUID) {
 					peripheral.discoverCharacteristics(nil, for: service)
 				}
 			}
@@ -92,19 +97,13 @@ public class BLEObject: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
 		for characteristic in service.characteristics! {
 			print("each characteristic: \(characteristic.uuid)")
 			// CBUUID see data in LightBlue
-			if characteristic.uuid == CBUUID(string: "FFE1") {
-				print("YEPPPPpp")
+			if characteristic.uuid == CBUUID(string: BLEData.characteristicUUID) {
 				self.characteristic = characteristic
 				self.peripheral = peripheral
 
 				NotificationCenter.default.post(name: NotificationName.didLinkUpToCharacteristic, object: nil)
 
-				/*controlDevice()
-
-				self.manager.cancelPeripheralConnection(peripheral)*/
-
-				//startButton.isEnabled = true
-				//PlaygroundPage.current.finish​Execution()
+				break
 			}
 		}
 	}
