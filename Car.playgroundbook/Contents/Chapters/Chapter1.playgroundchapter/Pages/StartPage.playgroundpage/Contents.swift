@@ -106,6 +106,8 @@ func didLinkUpToCharacteristic() {
 	//#-hidden-code
 	statusLabel.text = "Connected! :)"
 	ble.disconnectPeripheral()
+
+	PlaygroundPage.current.assessmentStatus = .pass(message: "You've connected your car through BLE successfully! Now go to the next page and continue!")
 	//#-end-hidden-code
 }
 //#-hidden-code
