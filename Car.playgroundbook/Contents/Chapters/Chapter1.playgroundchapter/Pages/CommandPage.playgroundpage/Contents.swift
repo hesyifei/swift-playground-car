@@ -7,7 +7,34 @@ Looks like you've successfully connected to your car! Now it's time for you to p
 import UIKit
 import Foundation
 import PlaygroundSupport
+//#-end-hidden-code
+/*:
+## Create a language
 
+In order to communicate with the car, we have to define **a set of rules** that both we (the iOS device) and the car can understand.
+
+Just imagine you meet a foreigner who doesn't understand English. So you two decide to invent a new language so that you two can understand each other.
+
+Now your car said _"Oh I think the format `<cmd time>` is very comprehensible!"_ and you are like _"Yeah! That's a good idea! Why don't we use `f`, `b`, `l` and `r` as `cmd` and use milliseconds for `time`?"_
+
+But how can we do that technically? It's very easy in Swift. We will use [enum](glossary://enum) to define the specfic set of commands and use the following commands to control the car
+
+<f2000>        move forward for 2000 milliseconds
+<b1500>        move backward for 1500 milliseconds
+<l500>         turn left for 500 milliseconds
+<r2017>        turn right for 2017 milliseconds
+
+Of course it's just an example. You can set the commands to whatever you like on the car and just don't forget to change it here!
+*/
+// Create the language
+enum Operation: String {
+	// You can change the commands (e.g. "f") to your own commands defined in the car
+	case forward = /*#-editable-code */"f"/*#-end-editable-code*/
+	case backward = /*#-editable-code */"b"/*#-end-editable-code*/
+	case turnLeft = /*#-editable-code */"l"/*#-end-editable-code*/
+	case turnRight = /*#-editable-code */"r"/*#-end-editable-code*/
+}
+//#-hidden-code
 class ViewController: UIViewController {
 	var startButton: UIButton!
 
@@ -68,33 +95,6 @@ class ViewController: UIViewController {
 	}
 
 //#-end-hidden-code
-/*:
-## Create a language
-
-In order to communicate with the car, we have to define **a set of rules** that both we (the iOS device) and the car can understand.
-
-Just imagine you meet a foreigner who doesn't understand English. So you two decide to invent a new language so that you two can understand each other.
-
-Now your car said _"Oh I think the format `<cmd time>` is very comprehensible!"_ and you are like _"Yeah! That's a good idea! Why don't we use `f`, `b`, `l` and `r` as `cmd` and use milliseconds for `time`?"_
-
-But how can we do that technically? It's very easy in Swift. We will use [enum](glossary://enum) to define the specfic set of commands and use the following commands to control the car
-
-	<f2000>        move forward for 2000 milliseconds
-	<b1500>        move backward for 1500 milliseconds
-	<l500>         turn left for 500 milliseconds
-	<r2017>        turn right for 2017 milliseconds
-
-Of course it's just an example. You can set the commands to whatever you like on the car and just don't forget to change it here!
-*/
-// Create the language
-enum Operation: String {
-	// You can change the commands (e.g. "f") to your own commands defined in the car
-	case forward = /*#-editable-code */"f"/*#-end-editable-code*/
-	case backward = /*#-editable-code */"b"/*#-end-editable-code*/
-	case turnLeft = /*#-editable-code */"l"/*#-end-editable-code*/
-	case turnRight = /*#-editable-code */"r"/*#-end-editable-code*/
-}
-
 // Control the car
 func move(_ operation: Operation, for sec: Double) {
 	let msec: Int = Int(sec*1000)                    // 1 second = 1000 milliseconds
@@ -136,27 +136,10 @@ After we finish the basic function above, it's time to run!
 func controlDevice() {
 	//#-code-completion(everything, hide)
 	//#-code-completion(currentmodule, hide)
-	//#-code-completion(identifier, show, moveForward(for:), moveBackward(for:), turnLeft(for:), turnRight(for:), if, for, while, =, <, >, ==, !=, +, -, true, false, &&, ||, !)
+	//#-code-completion(identifier, show, move(_:for:), Operation, ., forward, backward, turnLeft, turnRight, if, for, while, =, <, >, ==, !=, +, -, true, false, &&, ||, !)
 	//#-editable-code Tap to enter code
 
 	//#-end-editable-code
-}
-
-// We wrap each command into function so that we can use it easier and avoid duplicated code
-func turnLeft(for sec: Double) {
-	move(.turnLeft, for: sec)
-}
-
-func turnRight(for sec: Double) {
-	move(.turnRight, for: sec)
-}
-
-func moveForward(for sec: Double) {
-	move(.forward, for: sec)
-}
-
-func moveBackward(for sec: Double) {
-	move(.backward, for: sec)
 }
 //#-hidden-code
 
