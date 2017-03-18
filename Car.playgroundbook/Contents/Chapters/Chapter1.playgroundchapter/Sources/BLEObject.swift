@@ -1,5 +1,6 @@
 import UIKit
 import CoreBluetooth
+import PlaygroundSupport
 
 public class BLEData {
 	/*public static let name = "BT05"
