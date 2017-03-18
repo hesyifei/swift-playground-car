@@ -157,7 +157,9 @@ func controlDevice() {
 	} else {
 		PlaygroundPage.current.assessmentStatus = .fail(hints: ["Control the car to do **at least 4 movements**! You've just done \(controlledCarTimes). 😜"], solution: nil)
 	}
-	PlaygroundPage.current.finishExecution()
+	DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(3)) {
+		PlaygroundPage.current.finishExecution()
+	}
 	//#-end-hidden-code
 }
 //#-hidden-code

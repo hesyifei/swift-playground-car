@@ -112,7 +112,7 @@ func didLinkUpToCharacteristic() {
 	ble.disconnectPeripheral()
 
 	PlaygroundPage.current.assessmentStatus = .pass(message: "You've connected your car through BLE successfully! Now go to the next page and continue! 🎉")
-	DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(2)) {
+	DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(3)) {
 		// to make sure that statusLabel.text is changed
 		PlaygroundPage.current.finishExecution()
 	}
