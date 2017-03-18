@@ -1,5 +1,5 @@
 /*:
-# Welcome to Play Car!
+# Welcome to Play Car! 😊
 
 In this Playground, you are going to be guided to control a real model car with [Bluetooth low energy](glossary://BLE) through Swift code, and also become a real developer and design and develop a controller user interface that your friends and family can play with easily!
 
@@ -60,13 +60,9 @@ UserDefaults.standard.set("FFE1", forKey: "bleCharacteristicUUID")
 		print(BLEData.name)
 
 		if !(isValidCBUUID(BLEData.serviceUUID) && isValidCBUUID(BLEData.characteristicUUID)) {
-			fatalError("CBUUID is invalid!")
+			PlaygroundPage.current.assessmentStatus = .fail(hints: ["😞 Your BLE Service UUID or BLE Characteristic UUID is invalid! Make sure you didn't type anything wrong!"], solution: nil)
+			PlaygroundPage.current.finishExecution()
 		}
-	}
-
-	func isValidCBUUID(_ inputString: String) -> Bool {
-		let length = inputString.characters.count
-		return (length == 4) || (length == 8) || (length == 32)
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -78,12 +74,13 @@ UserDefaults.standard.set("FFE1", forKey: "bleCharacteristicUUID")
 
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
+		if (isValidCBUUID(BLEData.serviceUUID) && isValidCBUUID(BLEData.characteristicUUID)) {
 //#-end-hidden-code
 ble.startConnect()
 
 //#-hidden-code
-
-		statusLabel.text = "Connecting..."
+			statusLabel.text = "Connecting..."
+		}
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {
@@ -93,6 +90,11 @@ ble.startConnect()
 		NotificationCenter.default.removeObserver(self, name: NotificationName.didDisconnectPeripheral, object: nil)
 	}
 
+	func isValidCBUUID(_ inputString: String) -> Bool {
+		let length = inputString.characters.count
+		return (length == 4) || (length == 8) || (length == 32)
+	}
+
 	func didDisconnectPeripheral() {
 		print("recieved didDisconnectPeripheral")
 	}
@@ -100,14 +102,20 @@ ble.startConnect()
 //#-end-hidden-code
 // This function will be called when your device is connected successfully.
 func didLinkUpToCharacteristic() {
+	//#-hidden-code
+	statusLabel.text = "Connected! :)"
+	//#-end-hidden-code
 	//#-editable-code
 	print("Connected to your car! :)")
 	//#-end-editable-code
 	//#-hidden-code
-	statusLabel.text = "Connected! :)"
 	ble.disconnectPeripheral()
 
-	PlaygroundPage.current.assessmentStatus = .pass(message: "You've connected your car through BLE successfully! Now go to the next page and continue!")
+	PlaygroundPage.current.assessmentStatus = .pass(message: "You've connected your car through BLE successfully! Now go to the next page and continue! 🎉")
+	DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(2)) {
+		// to make sure that statusLabel.text is changed
+		PlaygroundPage.current.finishExecution()
+	}
 	//#-end-hidden-code
 }
 //#-hidden-code
