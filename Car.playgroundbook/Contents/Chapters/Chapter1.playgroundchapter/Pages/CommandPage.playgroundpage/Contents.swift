@@ -78,6 +78,18 @@ class ViewController: UIViewController {
 
 		ble.disconnectPeripheral()
 
+		if controlledCarTimes >= 4 {
+			PlaygroundPage.current.assessmentStatus = .pass(message: "You've controlled your car through Swift code successfully! Now go to the [next page](@next) and continue! 🎉")
+			DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(3)) {
+				PlaygroundPage.current.finishExecution()
+			}
+		} else {
+			PlaygroundPage.current.assessmentStatus = .fail(hints: ["Control the car to do **at least 4 movements**! You've just done \(controlledCarTimes). 😜"], solution: nil)
+			DispatchQueue.main.async {
+				PlaygroundPage.current.finishExecution()
+			}
+		}
+
 		startButton.isEnabled = true
 		//PlaygroundPage.current.finish​Execution()
 	}
@@ -143,16 +155,6 @@ func controlDevice() {
 	//#-editable-code Tap to enter code
 
 	//#-end-editable-code
-	//#-hidden-code
-	if controlledCarTimes >= 4 {
-		PlaygroundPage.current.assessmentStatus = .pass(message: "You've controlled your car through Swift code successfully! Now go to the next page and continue! 🎉")
-	} else {
-		PlaygroundPage.current.assessmentStatus = .fail(hints: ["Control the car to do **at least 4 movements**! You've just done \(controlledCarTimes). 😜"], solution: nil)
-	}
-	DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(3)) {
-		PlaygroundPage.current.finishExecution()
-	}
-	//#-end-hidden-code
 }
 //#-hidden-code
 
