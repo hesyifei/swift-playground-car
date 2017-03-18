@@ -59,35 +59,26 @@ UserDefaults.standard.set("FFE1", forKey: "bleCharacteristicUUID")
 //#-hidden-code
 		print(BLEData.name)
 
+		// http://stackoverflow.com/a/7751272/2603230
+		NotificationCenter.default.removeObserver(self, name: NotificationName.didLinkUpToCharacteristic, object: nil)
+		NotificationCenter.default.removeObserver(self, name: NotificationName.didDisconnectPeripheral, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(self.didLinkUpToCharacteristic), name: NotificationName.didLinkUpToCharacteristic, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(self.didDisconnectPeripheral), name: NotificationName.didDisconnectPeripheral, object: nil)
+
 		if !(isValidCBUUID(BLEData.serviceUUID) && isValidCBUUID(BLEData.characteristicUUID)) {
 			PlaygroundPage.current.assessmentStatus = .fail(hints: ["😞 Your BLE Service UUID or BLE Characteristic UUID is invalid! Make sure you didn't type anything wrong!"], solution: nil)
 			PlaygroundPage.current.finishExecution()
-		}
-	}
-
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-
-		NotificationCenter.default.addObserver(self, selector: #selector(self.didLinkUpToCharacteristic), name: NotificationName.didLinkUpToCharacteristic, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(self.didDisconnectPeripheral), name: NotificationName.didDisconnectPeripheral, object: nil)
-	}
-
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
-		if (isValidCBUUID(BLEData.serviceUUID) && isValidCBUUID(BLEData.characteristicUUID)) {
+		} else {
+			DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(1)) {
 //#-end-hidden-code
-ble.startConnect()
+self.ble.startConnect()
 
 //#-hidden-code
-			statusLabel.text = "Connecting..."
+			}
+			DispatchQueue.main.async {
+				self.statusLabel.text = "Connecting..."
+			}
 		}
-	}
-
-	override func viewWillDisappear(_ animated: Bool) {
-		super.viewWillDisappear(animated)
-
-		NotificationCenter.default.removeObserver(self, name: NotificationName.didLinkUpToCharacteristic, object: nil)
-		NotificationCenter.default.removeObserver(self, name: NotificationName.didDisconnectPeripheral, object: nil)
 	}
 
 	func isValidCBUUID(_ inputString: String) -> Bool {
