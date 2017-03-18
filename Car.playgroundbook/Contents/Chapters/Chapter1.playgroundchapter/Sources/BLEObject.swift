@@ -28,7 +28,9 @@ public class BLEObject: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
 	}
 
 	public func restartConnect() {
-		self.manager.scanForPeripherals(withServices: nil, options: nil)
+		if !manager.isScanning {
+			self.manager.scanForPeripherals(withServices: nil, options: nil)
+		}
 	}
 
 	public func writeData(_ data: Data) {
@@ -44,7 +46,9 @@ public class BLEObject: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
 		print("centralManagerDidUpdateState: \(central.state.rawValue)")
 		switch central.state {
 		case .poweredOn:
-			central.scanForPeripherals(withServices: nil, options: nil)
+			if !central.isScanning {
+				central.scanForPeripherals(withServices: nil, options: nil)
+			}
 			break
 		default:
 			break
@@ -87,6 +91,8 @@ public class BLEObject: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
 				// CBUUID see data in LightBlue
 				if service.uuid == CBUUID(string: BLEData.serviceUUID) {
 					peripheral.discoverCharacteristics(nil, for: service)
+
+					break
 				}
 			}
 		}
