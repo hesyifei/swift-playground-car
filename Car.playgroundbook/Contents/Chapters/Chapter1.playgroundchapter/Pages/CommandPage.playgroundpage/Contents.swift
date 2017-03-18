@@ -105,7 +105,7 @@ func move(_ operation: Operation, for sec: Double) {
 	// You can also define your own set of rule that can be interpreted by your car
 	runCommand(/*#-editable-code */"<\(operation.rawValue)\(msec)>"/*#-end-editable-code*/)     // run the command
 
-	waitFor(msec)                                    // wait until this movement is finished to do the next one
+	wait(for: sec)                                   // wait until this movement is finished to do the next one
 	//#-hidden-code
 	controlledCarTimes = controlledCarTimes+1
 	//#-end-hidden-code
@@ -137,6 +137,7 @@ After we finish the basic function above, it's time to run!
 	move(.backward, for: 2)    // move the car backward for 2 seconds
 	move(.turnLeft, for: 1)    // turn left the car for 1 second
 	move(.turnRight, for: 2)   // turn right the car for 2 seconds
+	wait(for: 1.5)             // wait for 1.5 seconds until next operation
 
 ## Quest
 
@@ -147,7 +148,7 @@ After we finish the basic function above, it's time to run!
 func controlDevice() {
 	//#-code-completion(everything, hide)
 	//#-code-completion(currentmodule, hide)
-	//#-code-completion(identifier, show, move(_:for:), Operation, ., forward, backward, turnLeft, turnRight, if, for, while, =, <, >, ==, !=, +, -, true, false, &&, ||, !)
+	//#-code-completion(identifier, show, move(_:for:), wait(for:), Operation, ., forward, backward, turnLeft, turnRight, if, for, while, =, <, >, ==, !=, +, -, true, false, &&, ||, !)
 	//#-editable-code Tap to enter code
 
 	//#-end-editable-code
@@ -164,8 +165,8 @@ func controlDevice() {
 }
 //#-hidden-code
 
-	func waitFor(_ ms: Int) {
-		let mmsec: Int = ms * 1000
+	func wait(for sec: Double) {
+		let mmsec: Int = Int(sec * 1000 * 1000)
 		usleep(UInt32(mmsec))
 	}
 }
