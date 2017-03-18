@@ -19,10 +19,10 @@ Now your car said _"Oh I think the format `<cmd time>` is very comprehensible!"_
 
 But how can we do that technically? It's very easy in Swift. We will use [enum](glossary://enum) to define the specfic set of commands and use the following commands to control the car
 
-<f2000>        move forward for 2000 milliseconds
-<b1500>        move backward for 1500 milliseconds
-<l500>         turn left for 500 milliseconds
-<r2017>        turn right for 2017 milliseconds
+    <f2000>        move forward for 2000 milliseconds
+    <b1500>        move backward for 1500 milliseconds
+    <l500>         turn left for 500 milliseconds
+    <r2017>        turn right for 2017 milliseconds
 
 Of course it's just an example. You can set the commands to whatever you like on the car and just don't forget to change it here!
 */
@@ -35,8 +35,11 @@ enum Operation: String {
 	case turnRight = /*#-editable-code */"r"/*#-end-editable-code*/
 }
 //#-hidden-code
+
 class ViewController: UIViewController {
 	var startButton: UIButton!
+
+	var controlledCarTimes = 0
 
 	// must init here
 	let ble = BLEObject()
@@ -103,6 +106,9 @@ func move(_ operation: Operation, for sec: Double) {
 	runCommand(/*#-editable-code */"<\(operation.rawValue)\(msec)>"/*#-end-editable-code*/)     // run the command
 
 	waitFor(msec)                                    // wait until this movement is finished to do the next one
+	//#-hidden-code
+	controlledCarTimes = controlledCarTimes+1
+	//#-end-hidden-code
 }
 /*:
 Now you two have a common ground.
@@ -127,10 +133,15 @@ func runCommand(_ cmd: String) {
 
 After we finish the basic function above, it's time to run!
 
-    moveForward(for: 5)     // move the car forward for 5 seconds
-	moveBackward(for: 2)    // move the car backward for 2 seconds
-	turnLeft(for: 1)        // turn left the car for 1 second
-	turnRight(for: 2)       // turn right the car for 2 seconds
+    move(.forward, for: 3.5)   // move the car forward for 3.5 seconds
+	move(.backward, for: 2)    // move the car backward for 2 seconds
+	move(.turnLeft, for: 1)    // turn left the car for 1 second
+	move(.turnRight, for: 2)   // turn right the car for 2 seconds
+
+## Quest
+
+ 1. Play around the code to move your car (it's really easy 😜)!
+ 2. Control the car to do **at least 4 movements**.
 */
 // You will control your device in this function
 func controlDevice() {
@@ -140,6 +151,14 @@ func controlDevice() {
 	//#-editable-code Tap to enter code
 
 	//#-end-editable-code
+	//#-hidden-code
+	if controlledCarTimes >= 4 {
+		PlaygroundPage.current.assessmentStatus = .pass(message: "You've controlled your car through Swift code successfully! Now go to the next page and continue! 🎉")
+	} else {
+		PlaygroundPage.current.assessmentStatus = .fail(hints: ["Control the car to do **at least 4 movements**! You've just done \(controlledCarTimes). 😜"], solution: nil)
+	}
+	PlaygroundPage.current.finishExecution()
+	//#-end-hidden-code
 }
 //#-hidden-code
 
