@@ -54,27 +54,18 @@ class ViewController: UIViewController {
 		startButton.isEnabled = false
 
 		self.view.addSubview(startButton)
-	}
 
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
 
+		// http://stackoverflow.com/a/7751272/2603230
+		NotificationCenter.default.removeObserver(self, name: NotificationName.didLinkUpToCharacteristic, object: nil)
+		NotificationCenter.default.removeObserver(self, name: NotificationName.didDisconnectPeripheral, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(self.didLinkUpToCharacteristic), name: NotificationName.didLinkUpToCharacteristic, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(self.didDisconnectPeripheral), name: NotificationName.didDisconnectPeripheral, object: nil)
-	}
 
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
 
 		ble.startConnect()
 	}
 
-	override func viewWillDisappear(_ animated: Bool) {
-		super.viewWillDisappear(animated)
-
-		NotificationCenter.default.removeObserver(self, name: NotificationName.didLinkUpToCharacteristic, object: nil)
-		NotificationCenter.default.removeObserver(self, name: NotificationName.didDisconnectPeripheral, object: nil)
-	}
 
 	func didDisconnectPeripheral() {
 		print("recieved didDisconnectPeripheral")
