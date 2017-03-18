@@ -9,8 +9,8 @@
 	<key>Pages</key>
 	<array>
 		<string>StartPage.playgroundpage</string>
+		<string>CommandPage.playgroundpage</string>
 		<string>Page1.playgroundpage</string>
-		<string>Page2.playgroundpage</string>
 	</array>
 </dict>
 </plist>
