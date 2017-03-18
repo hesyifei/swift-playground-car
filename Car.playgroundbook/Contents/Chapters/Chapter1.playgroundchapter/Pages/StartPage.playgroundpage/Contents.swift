@@ -1,13 +1,12 @@
 /*:
 # Welcome to Play Car!
 
-In this Playground, you are going to be guided to control a real model car through Swift code, and also be like a developer and develop a controller user interface that you can play with your friends and family!
+In this Playground, you are going to be guided to control a real model car with [Bluetooth low energy](glossary://BLE) through Swift code, and also become a real developer and design and develop a controller user interface that your friends and family can play with easily!
 
 Now what are you waiting for? Let's get started by connecting your car!
 
-When you connect your car successfully, move on to the next page to try it out!
+After you can connect your car successfully, move on to the [next page](@next) to try it out!
 */
-
 //#-hidden-code
 import UIKit
 import Foundation
@@ -15,7 +14,10 @@ import PlaygroundSupport
 
 class ViewController: UIViewController {
 	// must init here
-	let ble = BLEObject()
+//#-end-hidden-code
+let ble = BLEObject()
+
+//#-hidden-code
 
 	var statusLabel: UILabel!
 
@@ -53,6 +55,7 @@ UserDefaults.standard.set(/*#-editable-code */"<#T##BLE Characteristic UUID##Str
 UserDefaults.standard.set("BT05", forKey: "bleName")
 UserDefaults.standard.set("FFE0", forKey: "bleServiceUUID")
 UserDefaults.standard.set("FFE1", forKey: "bleCharacteristicUUID")
+
 //#-hidden-code
 		print(BLEData.name)
 
@@ -76,7 +79,8 @@ UserDefaults.standard.set("FFE1", forKey: "bleCharacteristicUUID")
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 //#-end-hidden-code
-self.ble.startConnect()
+ble.startConnect()
+
 //#-hidden-code
 
 		statusLabel.text = "Connecting..."
@@ -101,7 +105,7 @@ func didLinkUpToCharacteristic() {
 	//#-end-editable-code
 	//#-hidden-code
 	statusLabel.text = "Connected! :)"
-	self.ble.disconnectPeripheral()
+	ble.disconnectPeripheral()
 	//#-end-hidden-code
 }
 //#-hidden-code
