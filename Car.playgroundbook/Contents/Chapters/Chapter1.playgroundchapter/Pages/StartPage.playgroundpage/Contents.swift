@@ -51,6 +51,7 @@ UserDefaults.standard.set(/*#-editable-code */"<#T##BLE Peripheral Name##String#
 UserDefaults.standard.set(/*#-editable-code */"<#T##BLE Service UUID##String#>"/*#-end-editable-code*/, forKey: "bleServiceUUID")
 UserDefaults.standard.set(/*#-editable-code */"<#T##BLE Characteristic UUID##String#>"/*#-end-editable-code*/, forKey: "bleCharacteristicUUID")
 
+// CCHANGE
 // for debug only
 UserDefaults.standard.set("BT05", forKey: "bleName")
 UserDefaults.standard.set("FFE0", forKey: "bleServiceUUID")

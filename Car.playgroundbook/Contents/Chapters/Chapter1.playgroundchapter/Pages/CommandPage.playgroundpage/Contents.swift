@@ -205,6 +205,11 @@ func controlDevice() {
 	//#-code-completion(currentmodule, hide)
 	//#-code-completion(identifier, show, move(_:for:), wait(for:), Operation, ., forward, backward, turnLeft, turnRight, if, for, while, =, <, >, ==, !=, +, -, true, false, &&, ||, !)
 	//#-editable-code Tap to enter code
+	// CCHANGE
+	move(.forward, for: 1)
+	move(.backward, for: 1)
+	move(.backward, for: 1)
+	move(.backward, for: 1)
 
 	//#-end-editable-code
 }
