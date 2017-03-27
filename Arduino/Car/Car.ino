@@ -82,7 +82,7 @@ void loop()
   static byte index = 0;
   if (Serial1.available()) {
     char cmdChar;
-    unsigned int para;
+    unsigned int para = 0;
 
 
     char inChar = Serial1.read();
@@ -127,6 +127,8 @@ void loop()
       rotate(TURN_RIGHT, para);
     } else if (cmdChar == 'l') {    // turn left
       rotate(TURN_LEFT, para);
+    } else if (cmdChar == 's') {    // stop car
+      movePos(RELEASE, 0);
     }
   }
 }
@@ -143,11 +145,13 @@ void movePos(int command, int timeI) {
   motor(2, command, SPEED);
   motor(3, command, SPEED);
   motor(4, command, SPEED);
-  delay(timeI);
-  motor(1, RELEASE, 0);
-  motor(2, RELEASE, 0);
-  motor(3, RELEASE, 0);
-  motor(4, RELEASE, 0);
+  if (timeI != 0) {
+    delay(timeI);
+    motor(1, RELEASE, 0);
+    motor(2, RELEASE, 0);
+    motor(3, RELEASE, 0);
+    motor(4, RELEASE, 0);
+  }
 }
 
 void rotate(int command, int timeI) {
@@ -166,11 +170,13 @@ void rotate(int command, int timeI) {
       motor(4, FORWARD, SPEED);
       break;
   }
-  delay(timeI);
-  motor(1, RELEASE, 0);
-  motor(2, RELEASE, 0);
-  motor(3, RELEASE, 0);
-  motor(4, RELEASE, 0);
+  if (timeI != 0) {
+    delay(timeI);
+    motor(1, RELEASE, 0);
+    motor(2, RELEASE, 0);
+    motor(3, RELEASE, 0);
+    motor(4, RELEASE, 0);
+  }
 }
 
 
