@@ -21,6 +21,13 @@ public class HelperFunc {
 	}
 }
 
+public class CarOperation {
+	public static let forward = UserDefaults.standard.string(forKey: "oForward") ?? "f"
+	public static let backward = UserDefaults.standard.string(forKey: "oBackward") ?? "b"
+	public static let turnLeft = UserDefaults.standard.string(forKey: "oTurnLeft") ?? "l"
+	public static let turnRight = UserDefaults.standard.string(forKey: "oTurnRight") ?? "r"
+}
+
 
 extension Date {
 	public func getHumanReadableString() -> String {

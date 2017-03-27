@@ -74,6 +74,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 		self.view.addConstraint(NSLayoutConstraint(item: tableView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: 0))
 		self.view.addConstraint(NSLayoutConstraint(item: tableView, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1, constant: 0))
 		self.view.addConstraint(NSLayoutConstraint(item: tableView, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1, constant: 0))
+
+
+		UserDefaults.standard.set("oForward", forKey: Operation.forward)
+		UserDefaults.standard.set("oBackward", forKey: Operation.backward)
+		UserDefaults.standard.set("oTurnLeft", forKey: Operation.turnLeft)
+		UserDefaults.standard.set("oTurnRight", forKey: Operation.turnRight)
 	}
 
 
