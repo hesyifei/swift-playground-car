@@ -36,24 +36,21 @@ enum Operation: String {
 }
 //#-hidden-code
 
-class ViewController: UIViewController {
-	var startButton: UIButton!
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+	var tableView: UITableView!
 
 	var controlledCarTimes = 0
+
+	var timeNeedToWait: Double = 0.0		// important!
 
 	// must init here
 	let ble = BLEObject()
 
+	var tableData = [String]()
+
 	override func viewDidLoad(){
 		super.viewDidLoad()
 		title = "Control your car through Swift code"
-
-		startButton = UIButton(frame: CGRect(x: 100, y: 100, width: 100, height: 50))
-		startButton.setTitle("Try again", for: .normal)
-		startButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-		startButton.isEnabled = false
-
-		self.view.addSubview(startButton)
 
 
 		// http://stackoverflow.com/a/7751272/2603230
@@ -64,6 +61,21 @@ class ViewController: UIViewController {
 
 
 		ble.startConnect()
+
+
+		tableView = UITableView(frame: CGRect(), style: .plain)
+		tableView.delegate = self
+		tableView.dataSource = self
+		tableView.translatesAutoresizingMaskIntoConstraints = false
+
+		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+
+		self.view.addSubview(tableView)
+
+		self.view.addConstraint(NSLayoutConstraint(item: tableView, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1, constant: 0))
+		self.view.addConstraint(NSLayoutConstraint(item: tableView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: 0))
+		self.view.addConstraint(NSLayoutConstraint(item: tableView, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1, constant: 0))
+		self.view.addConstraint(NSLayoutConstraint(item: tableView, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1, constant: 0))
 	}
 
 
@@ -76,42 +88,62 @@ class ViewController: UIViewController {
 
 		controlDevice()
 
-		ble.disconnectPeripheral()
+		HelperFunc.delay(bySeconds: timeNeedToWait) {		// wait until all movements are finished
+			self.ble.disconnectPeripheral()
 
-		if controlledCarTimes >= 4 {
-			PlaygroundPage.current.assessmentStatus = .pass(message: "You've controlled your car through Swift code successfully! Now go to the [next page](@next) and continue! 🎉")
-			DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(3)) {
-				PlaygroundPage.current.finishExecution()
-			}
-		} else {
-			PlaygroundPage.current.assessmentStatus = .fail(hints: ["Control the car to do **at least 4 movements**! You've just done \(controlledCarTimes). 😜"], solution: nil)
-			DispatchQueue.main.async {
-				PlaygroundPage.current.finishExecution()
+			if self.controlledCarTimes >= 4 {
+				PlaygroundPage.current.assessmentStatus = .pass(message: "You've controlled your car through Swift code successfully! Now go to the [next page](@next) and continue! 🎉")
+				DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(3)) {
+					PlaygroundPage.current.finishExecution()
+				}
+			} else {
+				PlaygroundPage.current.assessmentStatus = .fail(hints: ["Control the car to do **at least 4 movements**! You've just done \(self.controlledCarTimes). 😜"], solution: nil)
+				DispatchQueue.main.async {
+					PlaygroundPage.current.finishExecution()
+				}
 			}
 		}
-
-		startButton.isEnabled = true
-		//PlaygroundPage.current.finish​Execution()
 	}
 
-	func buttonAction() {
-		print("BBUTON")
-		ble.restartConnect()
-		startButton.isEnabled = false
+	// MARK: - tableView related
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return tableData.count
+	}
+
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+		cell.textLabel?.text = tableData[indexPath.row]
+		return cell
+	}
+
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		self.tableView.deselectRow(at: indexPath, animated: true)
+	}
+
+	func appendToTable(_ newText: String) {
+		tableData.append(newText)
+
+		self.tableView.beginUpdates()
+		self.tableView.insertRows(at: [IndexPath(row: self.tableData.count-1, section: 0)], with: .automatic)
+		self.tableView.endUpdates()
+		self.tableView.scrollToRow(at: IndexPath(row: self.tableData.count-1, section: 0), at: .bottom, animated: true)
 	}
 
 //#-end-hidden-code
 // Control the car
 func move(_ operation: Operation, for sec: Double) {
-	let msec: Int = Int(sec*1000)                    // 1 second = 1000 milliseconds
-
-	// You can also define your own set of rule that can be interpreted by your car
-	runCommand(/*#-editable-code */"<\(operation.rawValue)\(msec)>"/*#-end-editable-code*/)     // run the command
-
-	wait(for: sec)                                   // wait until this movement is finished to do the next one
+	let msec: Int = Int(sec*1000)                     // 1 second = 1000 milliseconds
 	//#-hidden-code
-	controlledCarTimes = controlledCarTimes+1
+	HelperFunc.delay(bySeconds: timeNeedToWait) {		// wait until last movement is finished to do the next one
+		self.appendToTable("\(operation.rawValue)\(msec) START \(Date())")
 	//#-end-hidden-code
+	// You can also define your own set of rule that can be interpreted by your car
+	self.runCommand(/*#-editable-code */"<\(operation.rawValue)\(msec)>"/*#-end-editable-code*/)     // run the command
+	//#-hidden-code
+		self.controlledCarTimes = self.controlledCarTimes+1
+	}
+	//#-end-hidden-code
+	wait(for: sec)                                    // wait until this movement is finished to do the next one
 }
 /*:
 Now you two have a common ground.
@@ -159,8 +191,15 @@ func controlDevice() {
 //#-hidden-code
 
 	func wait(for sec: Double) {
-		let mmsec: Int = Int(sec * 1000 * 1000)
-		usleep(UInt32(mmsec))
+		/*// before
+		delay(bySeconds: timeNeedToWait) {
+			self.appendToTable("wait \(sec) START \(Date())")
+		}*/
+		timeNeedToWait = timeNeedToWait + sec
+		/*// after
+		delay(bySeconds: timeNeedToWait) {
+			self.appendToTable("wait \(sec) END \(Date())")
+		}*/
 	}
 }
 
