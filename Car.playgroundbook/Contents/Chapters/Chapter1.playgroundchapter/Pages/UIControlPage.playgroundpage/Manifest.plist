@@ -8,5 +8,7 @@
 	<string>Be a developer!</string>
 	<key>LiveViewMode</key>
 	<string>VisibleByDefault</string>
+	<key>PosterReference</key>
+	<string>I-VC.png</string>
 </dict>
 </plist>
