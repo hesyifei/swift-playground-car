@@ -20,3 +20,15 @@ public class HelperFunc {
 		}
 	}
 }
+
+
+extension Date {
+	public func getHumanReadableString() -> String {
+		let formatter = DateFormatter()
+		formatter.locale = Locale.current
+		formatter.dateStyle = .none
+		formatter.timeStyle = .medium
+
+		return formatter.string(from: self)
+	}
+}

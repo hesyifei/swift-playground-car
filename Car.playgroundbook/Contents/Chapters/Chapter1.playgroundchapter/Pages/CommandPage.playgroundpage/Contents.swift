@@ -50,7 +50,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
 	override func viewDidLoad(){
 		super.viewDidLoad()
-		title = "Control your car through Swift code"
+		title = "Command History"
 
 
 		// http://stackoverflow.com/a/7751272/2603230
@@ -67,8 +67,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 		tableView.delegate = self
 		tableView.dataSource = self
 		tableView.translatesAutoresizingMaskIntoConstraints = false
-
-		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
 
 		self.view.addSubview(tableView)
 
@@ -111,8 +109,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 	}
 
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
-		cell.textLabel?.text = tableData[indexPath.row]
+		var cell: UITableViewCell!
+		if let reuseCell = tableView.dequeueReusableCell(withIdentifier: "cell") {
+			cell = reuseCell
+		} else {
+			cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+		}
+		let data = tableData[indexPath.row].components(separatedBy: "|")
+		cell.textLabel?.text = data[0]
+		if data.count == 2 {
+			cell.detailTextLabel?.text = data[1]
+		}
 		return cell
 	}
 
@@ -135,7 +142,7 @@ func move(_ operation: Operation, for sec: Double) {
 	let msec: Int = Int(sec*1000)                     // 1 second = 1000 milliseconds
 	//#-hidden-code
 	HelperFunc.delay(bySeconds: timeNeedToWait) {		// wait until last movement is finished to do the next one
-		self.appendToTable("\(operation.rawValue)\(msec) START \(Date())")
+		self.appendToTable("<\(operation.rawValue)\(msec)>|\(Date().getHumanReadableString())")
 	//#-end-hidden-code
 	// You can also define your own set of rule that can be interpreted by your car
 	self.runCommand(/*#-editable-code */"<\(operation.rawValue)\(msec)>"/*#-end-editable-code*/)     // run the command
