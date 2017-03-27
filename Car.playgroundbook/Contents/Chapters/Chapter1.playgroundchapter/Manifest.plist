@@ -10,7 +10,7 @@
 	<array>
 		<string>StartPage.playgroundpage</string>
 		<string>CommandPage.playgroundpage</string>
-		<string>Page1.playgroundpage</string>
+		<string>UIControlPage.playgroundpage</string>
 	</array>
 </dict>
 </plist>
