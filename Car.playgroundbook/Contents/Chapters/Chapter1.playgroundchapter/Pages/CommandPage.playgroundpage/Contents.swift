@@ -139,18 +139,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //#-end-hidden-code
 // Control the car
 func move(_ operation: Operation, for sec: Double) {
-	let msec: Int = Int(sec*1000)                     // 1 second = 1000 milliseconds
+	let msec: Int = Int(sec*1000)                 // 1 second = 1000 milliseconds
 	//#-hidden-code
-	HelperFunc.delay(bySeconds: timeNeedToWait) {		// wait until last movement is finished to do the next one
-		self.appendToTable("<\(operation.rawValue)\(msec)>|\(Date().getHumanReadableString())")
+	HelperFunc.delay(bySeconds: timeNeedToWait) { // wait until last movement is finished to do the next one
 	//#-end-hidden-code
 	// You can also define your own set of rule that can be interpreted by your car
-	self.runCommand(/*#-editable-code */"<\(operation.rawValue)\(msec)>"/*#-end-editable-code*/)     // run the command
+	let yourCommand = /*#-editable-code */"<\(operation.rawValue)\(msec)>"/*#-end-editable-code*/
+	//#-hidden-code
+	self.appendToTable("\(yourCommand)|\(Date().getHumanReadableString())")
+	//#-end-hidden-code
+	self.runCommand(yourCommand)                  // run the command
 	//#-hidden-code
 		self.controlledCarTimes = self.controlledCarTimes+1
 	}
 	//#-end-hidden-code
-	wait(for: sec)                                    // wait until this movement is finished to do the next one
+	wait(for: sec)                                // wait until this movement is finished to do the next one
 }
 /*:
 Now you two have a common ground.
