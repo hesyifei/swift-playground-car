@@ -1,5 +1,5 @@
 /*:
-# Control your car through Swift code!
+# Control your car through Swift code! ⌨️
 
 Looks like you've successfully connected to your car! Now it's time for you to play around!
 */
@@ -76,10 +76,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 		self.view.addConstraint(NSLayoutConstraint(item: tableView, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1, constant: 0))
 
 
-		UserDefaults.standard.set("oForward", forKey: Operation.forward)
-		UserDefaults.standard.set("oBackward", forKey: Operation.backward)
-		UserDefaults.standard.set("oTurnLeft", forKey: Operation.turnLeft)
-		UserDefaults.standard.set("oTurnRight", forKey: Operation.turnRight)
+		DispatchQueue.main.async {
+			self.appendToTable("Connecting...")
+		}
+
+		UserDefaults.standard.set(Operation.forward.rawValue, forKey: "oForward")
+		UserDefaults.standard.set(Operation.backward.rawValue, forKey: "oBackward")
+		UserDefaults.standard.set(Operation.turnLeft.rawValue, forKey: "oTurnLeft")
+		UserDefaults.standard.set(Operation.turnRight.rawValue, forKey: "oTurnRight")
 	}
 
 
@@ -134,7 +138,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 	}
 
 	func appendToTable(_ newText: String) {
-		tableData.append(newText)
+		tableData.append("\(newText)|\(Date().getHumanReadableString())")
 
 		self.tableView.beginUpdates()
 		self.tableView.insertRows(at: [IndexPath(row: self.tableData.count-1, section: 0)], with: .automatic)
@@ -152,7 +156,7 @@ func move(_ operation: Operation, for sec: Double) {
 	// You can also define your own set of rule that can be interpreted by your car
 	let yourCommand = /*#-editable-code */"<\(operation.rawValue)\(msec)>"/*#-end-editable-code*/
 	//#-hidden-code
-	self.appendToTable("\(yourCommand)|\(Date().getHumanReadableString())")
+	self.appendToTable("\(yourCommand)")
 	//#-end-hidden-code
 	self.runCommand(yourCommand)                  // run the command
 	//#-hidden-code
