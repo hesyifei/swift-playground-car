@@ -15,6 +15,14 @@ import PlaygroundSupport
 class ViewController: UIViewController {
 	// must init here
 //#-end-hidden-code
+/*:
+Don't have a real car? Change `hasRealCar` to `false`, and we will have a virtual one on screen for you. ☺️
+*/
+//#-code-completion(everything, hide)
+//#-code-completion(currentmodule, hide)
+//#-code-completion(literal, show, boolean)
+let hasRealCar = /*#-editable-code Tap to enter code*/true/*#-end-editable-code*/
+
 let ble = BLEObject()
 
 //#-hidden-code
@@ -38,6 +46,9 @@ let ble = BLEObject()
 		let verticalConstraint = NSLayoutConstraint(item: statusLabel, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1, constant: 0)
 
 		self.view.addConstraints([horizontalConstraint, verticalConstraint])
+
+
+		UserDefaults.standard.set(hasRealCar, forKey: "hasRealCar")
 
 		UserDefaults.standard.set("", forKey: "bleName")
 		UserDefaults.standard.set("", forKey: "bleServiceUUID")

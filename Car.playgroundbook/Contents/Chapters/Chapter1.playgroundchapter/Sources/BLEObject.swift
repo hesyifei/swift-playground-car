@@ -31,30 +31,40 @@ public class BLEObject: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
 	}
 
 	public func restartConnect() {
-		if !manager.isScanning {
-			self.manager.scanForPeripherals(withServices: nil, options: nil)
+		if UserDefaults.standard.bool(forKey: "hasRealCar") {
+			if !manager.isScanning {
+				self.manager.scanForPeripherals(withServices: nil, options: nil)
+			}
 		}
 	}
 
 	public func writeData(_ data: Data) {
-		self.peripheral.writeValue(data, for: characteristic, type: .withoutResponse)
+		if UserDefaults.standard.bool(forKey: "hasRealCar") {
+			self.peripheral.writeValue(data, for: characteristic, type: .withoutResponse)
+		}
 	}
 
 	public func disconnectPeripheral() {
-		print("disconnectPeripheral func called")
-		self.manager.cancelPeripheralConnection(peripheral)
+		if UserDefaults.standard.bool(forKey: "hasRealCar") {
+			print("disconnectPeripheral func called")
+			self.manager.cancelPeripheralConnection(peripheral)
+		}
 	}
 
 	public func centralManagerDidUpdateState(_ central: CBCentralManager) {
 		print("centralManagerDidUpdateState: \(central.state.rawValue)")
-		switch central.state {
-		case .poweredOn:
-			if !central.isScanning {
-				central.scanForPeripherals(withServices: nil, options: nil)
+		if UserDefaults.standard.bool(forKey: "hasRealCar") {
+			switch central.state {
+			case .poweredOn:
+				if !central.isScanning {
+					central.scanForPeripherals(withServices: nil, options: nil)
+				}
+				break
+			default:
+				break
 			}
-			break
-		default:
-			break
+		} else {
+			NotificationCenter.default.post(name: NotificationName.didLinkUpToCharacteristic, object: nil)
 		}
 	}
 
