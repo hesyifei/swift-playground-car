@@ -11,6 +11,7 @@
 		<string>StartPage.playgroundpage</string>
 		<string>CommandPage.playgroundpage</string>
 		<string>UIControlPage.playgroundpage</string>
+		<string>AutoControlPage.playgroundpage</string>
 	</array>
 </dict>
 </plist>

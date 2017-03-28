@@ -22,6 +22,9 @@ public class NotificationName {
 
 public class BLEObject: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
 
+	public var currentDistance: Int = 0
+
+
 	lazy var manager: CBCentralManager = CBCentralManager(delegate: self, queue: DispatchQueue.main)
 	var peripheral: CBPeripheral!
 	var characteristic: CBCharacteristic!
@@ -122,8 +125,27 @@ public class BLEObject: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
 
 				NotificationCenter.default.post(name: NotificationName.didLinkUpToCharacteristic, object: nil)
 
+				peripheral.setNotifyValue(true, for: characteristic)
 				break
 			}
 		}
 	}
+
+	public func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+		//print("didUpdateValueFor \(characteristic.uuid)")
+		if let value = characteristic.value {
+			// http://stackoverflow.com/a/32894672/2603230
+			if let utf8Data = String(data: value, encoding: String.Encoding.utf8) {
+				let someReceivedData = utf8Data.components(separatedBy: " ")
+				for eachReceivedData in someReceivedData {
+					if !eachReceivedData.isEmpty {
+						if let eachReceivedDataInt = Int(eachReceivedData) {
+							self.currentDistance = eachReceivedDataInt
+						}
+					}
+				}
+			}
+		}
+	}
+
 }
