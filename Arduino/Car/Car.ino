@@ -37,8 +37,13 @@
 #define SPEED 200
 
 
+// for ultra sonic
+#define TRIGPIN A9
+#define ECHOPIN A8
+
+
 unsigned long previousMillis = 0;        // will store last time data was obtained
-const long interval = 10;                // interval for obtaining ECG data (milliseconds)
+const long interval = 10;
 
 
 int positionData = 0;
@@ -58,6 +63,9 @@ void setup()
   Serial.begin(9600);
 
   Serial.println("Hello! :D");
+
+  pinMode(TRIGPIN, OUTPUT);
+  pinMode(ECHOPIN, INPUT);
 }
 
 
@@ -70,6 +78,15 @@ void loop()
 
     positionData++;
     //Serial.println(positionData);
+
+
+    long cm = ping();
+    Serial1.print(cm);
+    Serial1.print(" ");
+
+    if (cm <= 100) {
+      //Serial.println("HAHAHA");
+    }
   }
 
   //movePos(FORWARD, 10000);
@@ -177,6 +194,18 @@ void rotate(int command, int timeI) {
     motor(3, RELEASE, 0);
     motor(4, RELEASE, 0);
   }
+}
+
+
+
+// for ultrasonic
+long ping() {
+  digitalWrite(TRIGPIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIGPIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIGPIN, LOW);
+  return pulseIn(ECHOPIN, HIGH) / 58;
 }
 
 
