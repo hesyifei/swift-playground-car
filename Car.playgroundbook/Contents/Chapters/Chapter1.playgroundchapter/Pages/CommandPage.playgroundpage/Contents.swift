@@ -229,54 +229,11 @@ func controlDevice() {
 	}
 }
 
-class OuterViewController: UIViewController {
-	override func viewDidLoad() {
-		super.viewDidLoad()
 
-		DispatchQueue.main.async {
-			let vcContainerView = UIView()
-			vcContainerView.translatesAutoresizingMaskIntoConstraints = false
-			self.view.addSubview(vcContainerView)
-			NSLayoutConstraint.activate([
-				vcContainerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
-				vcContainerView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
-				vcContainerView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 10),
-				vcContainerView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.45)
-				])
-			let viewControllerOri = ViewController()
-			let viewController = UINavigationController(rootViewController: viewControllerOri)
-			self.add(viewController: viewController, to: vcContainerView)
+let viewControllerOri = ViewController()
+let viewController = UINavigationController(rootViewController: viewControllerOri)
 
-
-			let smContainerView = UIView()
-			smContainerView.translatesAutoresizingMaskIntoConstraints = false
-			self.view.addSubview(smContainerView)
-			NSLayoutConstraint.activate([
-				smContainerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
-				smContainerView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
-				smContainerView.topAnchor.constraint(equalTo: vcContainerView.bottomAnchor, constant: 10),
-				smContainerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -10),
-				])
-			let smViewController = SimulationViewController()
-			self.add(viewController: smViewController, to: smContainerView)
-		}
-	}
-
-	func add(viewController: UIViewController, to containerView: UIView) {
-		addChildViewController(viewController)
-		viewController.view.translatesAutoresizingMaskIntoConstraints = false
-		containerView.addSubview(viewController.view)
-		NSLayoutConstraint.activate([
-			viewController.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-			viewController.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-			viewController.view.topAnchor.constraint(equalTo: containerView.topAnchor),
-			viewController.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-			])
-		viewController.didMove(toParentViewController: self)
-	}}
-
-
-let controller = OuterViewController()
+let controller = OuterViewController(upperViewController: viewController, lowerViewController: SimulationViewController())
 
 PlaygroundPage.current.liveView = controller
 PlaygroundPage.current.needsIndefiniteExecution = true
