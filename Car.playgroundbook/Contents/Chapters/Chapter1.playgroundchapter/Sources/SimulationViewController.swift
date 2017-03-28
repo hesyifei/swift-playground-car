@@ -5,7 +5,7 @@ import Foundation
 public class SimulationViewController: UIViewController {
 	var carNode: SKSpriteNode!
 
-	var timeNeedToWait: Double = 0.0
+	var timeNeedToWait: Double = 0.0		// important!
 
 	public override func viewDidLoad() {
 		super.viewDidLoad()
@@ -43,7 +43,18 @@ public class SimulationViewController: UIViewController {
 		scene.addChild(self.carNode)
 	}
 
-	func move(_ operation: String, for sec: Double) {
+	final let RUN_KEY = "runKey"
+	func move(_ operation: String, for oriSec: Double) {
+		var isForever = false
+		if oriSec == 0 {
+			isForever = true
+		}
+
+		var sec = oriSec
+		if isForever {
+			timeNeedToWait = 0
+			sec = 1
+		}
 		HelperFunc.delay(bySeconds: timeNeedToWait) {
 			let msec: Int = Int(sec*1000)
 
@@ -57,16 +68,29 @@ public class SimulationViewController: UIViewController {
 				if operation == CarOperation.backward {
 					moveVector = CGVector(dx: length*sin(zRotation), dy: length*cos(zRotation))
 				}
-				self.carNode.run(SKAction.move(by: moveVector, duration: sec))
+				if isForever {
+					self.carNode.run(SKAction.repeatForever(SKAction.move(by: moveVector, duration: sec)), withKey: self.RUN_KEY)
+				} else {
+					self.carNode.run(SKAction.move(by: moveVector, duration: sec))
+				}
 				break
 			case CarOperation.turnLeft, CarOperation.turnRight:
-				let angle = CGFloat(0.001*Double(msec))
+				var angle = CGFloat(0.001*Double(msec))
 
 				if operation == CarOperation.turnLeft {
-					self.carNode.run(SKAction.rotate(byAngle: angle, duration: sec))
+
 				} else if operation == CarOperation.turnRight {
-					self.carNode.run(SKAction.rotate(byAngle: -angle, duration: sec))
+					angle = -angle
 				}
+
+				if isForever {
+					self.carNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: angle, duration: sec)), withKey: self.RUN_KEY)
+				} else {
+					self.carNode.run(SKAction.rotate(byAngle: angle, duration: sec))
+				}
+				break
+			case CarOperation.stop:
+				self.carNode.removeAction(forKey: self.RUN_KEY)
 				break
 			default:
 				break
@@ -82,13 +106,15 @@ public class SimulationViewController: UIViewController {
 	func simulationReceivedCommand(_ notification: NSNotification){
 		if let object = notification.object as? [String: Any] {
 			if let oriCmd = object["cmd"] as? String {
-				if oriCmd.characters.count >= 4 {
+				if oriCmd.characters.count >= 3 {
 					var cmd = oriCmd
 					cmd.remove(at: cmd.startIndex)
 					cmd.remove(at: cmd.index(before: cmd.endIndex))
 					let movement = String(cmd[cmd.startIndex])
 					cmd.remove(at: cmd.startIndex)
-					if let msec = Int(cmd) {
+					if cmd.characters.count == 0 {
+						move(movement, for: 0)
+					} else if let msec = Int(cmd) {
 						move(movement, for: Double(msec)/1000.0)
 					}
 				}

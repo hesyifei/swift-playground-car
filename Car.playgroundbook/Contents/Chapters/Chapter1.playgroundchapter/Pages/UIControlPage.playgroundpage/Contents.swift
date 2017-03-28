@@ -160,7 +160,10 @@ Set suitable directions (`.up`, `.left`, etc.) and `numberOfTapsRequired`
 	// Control the car
 	func move(_ operation: String) {
 		controlledCarTimes = controlledCarTimes+1
-		self.runCommand("<\(operation)>")
+		let yourCommand = "<\(operation)>"
+		self.runCommand(yourCommand)
+
+		NotificationCenter.default.post(name: NotificationName.simulationReceivedCommand, object: ["cmd": yourCommand])
 
 		if controlledCarTimes == 10 {
 			PlaygroundPage.current.assessmentStatus = .pass(message: "You've developed your first app successfully! Now share it with your friends and family 🤗 or go to the [next page](@next) and continue! 🎉")
@@ -254,9 +257,56 @@ Congrats! You've just finished your first app that everyone can use! Now show th
 //#-hidden-code
 }
 
-let controller = ViewController()
-let currentVC = UINavigationController(rootViewController: controller)
 
-PlaygroundPage.current.liveView = currentVC
+class OuterViewController: UIViewController {
+	override func viewDidLoad() {
+		super.viewDidLoad()
 
+		DispatchQueue.main.async {
+			let vcContainerView = UIView()
+			vcContainerView.translatesAutoresizingMaskIntoConstraints = false
+			self.view.addSubview(vcContainerView)
+			NSLayoutConstraint.activate([
+				vcContainerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
+				vcContainerView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
+				vcContainerView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 10),
+				vcContainerView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.45)
+				])
+			let viewControllerOri = ViewController()
+			let viewController = UINavigationController(rootViewController: viewControllerOri)
+			self.add(viewController: viewController, to: vcContainerView)
+
+
+			let smContainerView = UIView()
+			smContainerView.translatesAutoresizingMaskIntoConstraints = false
+			self.view.addSubview(smContainerView)
+			NSLayoutConstraint.activate([
+				smContainerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
+				smContainerView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
+				smContainerView.topAnchor.constraint(equalTo: vcContainerView.bottomAnchor, constant: 10),
+				smContainerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -10),
+				])
+			let smViewController = SimulationViewController()
+			self.add(viewController: smViewController, to: smContainerView)
+		}
+	}
+
+	func add(viewController: UIViewController, to containerView: UIView) {
+		addChildViewController(viewController)
+		viewController.view.translatesAutoresizingMaskIntoConstraints = false
+		containerView.addSubview(viewController.view)
+		NSLayoutConstraint.activate([
+			viewController.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+			viewController.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+			viewController.view.topAnchor.constraint(equalTo: containerView.topAnchor),
+			viewController.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+			])
+		viewController.didMove(toParentViewController: self)
+	}}
+
+
+let controller = OuterViewController()
+
+PlaygroundPage.current.liveView = controller
+PlaygroundPage.current.needsIndefiniteExecution = true
 
