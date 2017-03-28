@@ -20,24 +20,6 @@ public class HelperFunc {
 			}
 		}
 	}
-
-
-	// http://stackoverflow.com/a/36497395/2603230
-	public static func videoOrientationFromCurrentDeviceOrientation() -> AVCaptureVideoOrientation {
-		switch UIDevice.current.orientation {
-		case .portrait:
-			return AVCaptureVideoOrientation.portrait
-		case .landscapeLeft:
-			return AVCaptureVideoOrientation.landscapeRight
-		case .landscapeRight:
-			return AVCaptureVideoOrientation.landscapeLeft
-		case .portraitUpsideDown:
-			return AVCaptureVideoOrientation.portraitUpsideDown
-		default:
-			// Can it happens?
-			return AVCaptureVideoOrientation.portrait
-		}
-	}
 }
 
 public class CarOperation {
