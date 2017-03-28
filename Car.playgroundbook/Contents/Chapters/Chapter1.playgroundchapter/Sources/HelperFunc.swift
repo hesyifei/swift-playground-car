@@ -28,9 +28,9 @@ public class HelperFunc {
 		case .portrait:
 			return AVCaptureVideoOrientation.portrait
 		case .landscapeLeft:
-			return AVCaptureVideoOrientation.landscapeLeft
-		case .landscapeRight:
 			return AVCaptureVideoOrientation.landscapeRight
+		case .landscapeRight:
+			return AVCaptureVideoOrientation.landscapeLeft
 		case .portraitUpsideDown:
 			return AVCaptureVideoOrientation.portraitUpsideDown
 		default:

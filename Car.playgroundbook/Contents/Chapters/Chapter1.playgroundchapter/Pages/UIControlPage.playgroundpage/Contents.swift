@@ -14,6 +14,7 @@ Each page of an app you used is a **[View Controller](glossary://ViewController)
 //#-hidden-code
 import UIKit
 import PlaygroundSupport
+import AVFoundation
 
 public class Operation {
 	public static let forward = CarOperation.forward
@@ -155,6 +156,70 @@ Set suitable directions (`.up`, `.left`, etc.) and `numberOfTapsRequired`
 	//#-end-hidden-code
 }
 //#-hidden-code
+
+	var cameraView: UIView!
+	var captureSession = AVCaptureSession()
+	var sessionOutput = AVCapturePhotoOutput()
+	var sessionOutputSetting = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecJPEG])
+	var previewLayer = AVCaptureVideoPreviewLayer()
+
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+
+		cameraView = UIView()
+		cameraView.backgroundColor = UIColor.green
+		cameraView.translatesAutoresizingMaskIntoConstraints = false
+		self.view.addSubview(cameraView)
+
+		self.view.addConstraint(NSLayoutConstraint(item: cameraView, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1, constant: 0))
+		self.view.addConstraint(NSLayoutConstraint(item: cameraView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: 0))
+		self.view.addConstraint(NSLayoutConstraint(item: cameraView, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1, constant: 0))
+		self.view.addConstraint(NSLayoutConstraint(item: cameraView, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1, constant: 0))
+	}
+
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+
+		let deviceDiscoverySession = AVCaptureDeviceDiscoverySession(deviceTypes: [.builtInTelephotoCamera, .builtInWideAngleCamera], mediaType: AVMediaTypeVideo, position: .unspecified)
+		for device in (deviceDiscoverySession?.devices)! {
+			if device.position == .back {
+				do {
+					let input = try AVCaptureDeviceInput(device: device)
+					if(captureSession.canAddInput(input)){
+						captureSession.addInput(input)
+
+						if(captureSession.canAddOutput(sessionOutput)){
+							captureSession.addOutput(sessionOutput)
+							previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+							previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+							previewLayer.connection.videoOrientation = HelperFunc.videoOrientationFromCurrentDeviceOrientation()
+							cameraView.layer.addSublayer(previewLayer)
+						}
+					}
+				} catch {
+					print("exception!")
+				}
+			}
+		}
+
+		captureSession.startRunning()
+
+		DispatchQueue.main.async {
+			self.previewLayer.frame = self.cameraView.bounds
+		}
+	}
+
+	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+		coordinator.animate(alongsideTransition: { (UIViewControllerTransitionCoordinatorContext) -> Void in
+			self.previewLayer.frame = self.cameraView.bounds
+			self.previewLayer.connection.videoOrientation = HelperFunc.videoOrientationFromCurrentDeviceOrientation()
+
+		}, completion: { (UIViewControllerTransitionCoordinatorContext) -> Void in
+			// Finish Rotation
+		})
+
+		super.viewWillTransition(to: size, with: coordinator)
+	}
 
 	// Control the car
 	func move(_ operation: String) {
