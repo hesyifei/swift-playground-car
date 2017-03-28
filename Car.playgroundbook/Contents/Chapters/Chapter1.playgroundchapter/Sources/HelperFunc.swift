@@ -1,5 +1,6 @@
 import UIKit
 import Foundation
+import AVFoundation
 
 public class HelperFunc {
 	public static func delay(bySeconds seconds: Double, dispatchLevel: DispatchLevel = .main, closure: @escaping () -> Void) {
@@ -19,6 +20,24 @@ public class HelperFunc {
 			}
 		}
 	}
+
+
+	// http://stackoverflow.com/a/36497395/2603230
+	public static func videoOrientationFromCurrentDeviceOrientation() -> AVCaptureVideoOrientation {
+		switch UIDevice.current.orientation {
+		case .portrait:
+			return AVCaptureVideoOrientation.portrait
+		case .landscapeLeft:
+			return AVCaptureVideoOrientation.landscapeLeft
+		case .landscapeRight:
+			return AVCaptureVideoOrientation.landscapeRight
+		case .portraitUpsideDown:
+			return AVCaptureVideoOrientation.portraitUpsideDown
+		default:
+			// Can it happens?
+			return AVCaptureVideoOrientation.portrait
+		}
+	}
 }
 
 public class CarOperation {
@@ -26,6 +45,7 @@ public class CarOperation {
 	public static let backward = UserDefaults.standard.string(forKey: "oBackward") ?? "b"
 	public static let turnLeft = UserDefaults.standard.string(forKey: "oTurnLeft") ?? "l"
 	public static let turnRight = UserDefaults.standard.string(forKey: "oTurnRight") ?? "r"
+	public static let stop = UserDefaults.standard.string(forKey: "oStop") ?? "s"
 }
 
 

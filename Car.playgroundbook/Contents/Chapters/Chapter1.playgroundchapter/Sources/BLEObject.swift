@@ -16,6 +16,8 @@ public class NotificationName {
 	public static let didLinkUpToCharacteristic = Notification.Name("didLinkUpToCharacteristic")
 	public static let didConnectPeripheral = Notification.Name("didConnectPeripheral")
 	public static let didDisconnectPeripheral = Notification.Name("didDisconnectPeripheral")
+
+	public static let simulationReceivedCommand = Notification.Name("simulationReceivedCommand")
 }
 
 public class BLEObject: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
