@@ -156,7 +156,7 @@ func move(_ operation: Operation, for sec: Double) {
 	// You can also define your own set of rule that can be interpreted by your car
 	let yourCommand = /*#-editable-code */"<\(operation.rawValue)\(msec)>"/*#-end-editable-code*/
 	//#-hidden-code
-	self.appendToTable("\(yourCommand)")
+		self.appendToTable("\(yourCommand)")
 	//#-end-hidden-code
 	self.runCommand(yourCommand)                  // run the command
 	//#-hidden-code

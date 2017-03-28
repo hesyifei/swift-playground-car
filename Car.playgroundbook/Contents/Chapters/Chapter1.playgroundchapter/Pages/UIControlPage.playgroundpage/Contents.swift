@@ -21,7 +21,7 @@ public class Operation {
 	public static let backward = CarOperation.backward
 	public static let turnLeft = CarOperation.turnLeft
 	public static let turnRight = CarOperation.turnRight
-	public static let stop = "s"
+	public static let stop = CarOperation.stop
 }
 
 //#-end-hidden-code
@@ -130,8 +130,8 @@ Set suitable directions (`.up`, `.left`, etc.) and `numberOfTapsRequired`
 //#-code-completion(literal, show, array)
 //#-code-completion(identifier, show, UISwipeGestureRecognizerDirection, ., up, down, left, right)
 	// CCHANGE
-	let directions: [UISwipeGestureRecognizerDirection] = /*#-editable-code Tap to enter code*/<#T##directions##Array#>/*#-end-editable-code*/
-	//let directions: [UISwipeGestureRecognizerDirection] = [.left, .right, .up, .down]
+	//let directions: [UISwipeGestureRecognizerDirection] = /*#-editable-code Tap to enter code*/<#T##directions##Array#>/*#-end-editable-code*/
+	let directions: [UISwipeGestureRecognizerDirection] = [.left, .right, .up, .down]
 	for direction in directions {    // add four directions' swipe gesture
 		let gesture = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture))
 		gesture.direction = direction
