@@ -188,6 +188,15 @@ Set suitable directions (`.up`, `.left`, etc.) and `numberOfTapsRequired`
 
 		mainLabel.text = "Try swipe or double tap me!"
 	}
+
+
+	let synth = AVSpeechSynthesizer()
+	var myUtterance = AVSpeechUtterance(string: "")
+	func speak(_ inputText: String) {
+		myUtterance = AVSpeechUtterance(string: inputText)
+		myUtterance.rate = AVSpeechUtteranceDefaultSpeechRate
+		synth.speak(myUtterance)
+	}
 //#-end-hidden-code
 /*:
 Now it's time to handle the gestures! The `move` function is changed slightly comparing to that of the last page. 🕹
@@ -203,10 +212,12 @@ Now it's time to handle the gestures! The `move` function is changed slightly co
 1. Use suitable function to control the car. (Hint: `switch`)
 2. Display current action in `mainLabel` and also `print()` out current action for debug.
 3. Perform at least 10 operations with swipes and taps.
+
+Optional: use `speak(text)` to let your iPad read out the change.
 */
 //#-code-completion(everything, hide)
 //#-code-completion(currentmodule, hide)
-//#-code-completion(identifier, show, switch, case, break, UISwipeGestureRecognizerDirection, left, right, down, up, ., print, mainLabel, text, move(_:), Operation, forward, backward, turnLeft, turnRight, !)
+//#-code-completion(identifier, show, switch, case, break, UISwipeGestureRecognizerDirection, left, right, down, up, ., print, mainLabel, text, move(_:), speak(_:), Operation, forward, backward, turnLeft, turnRight, !)
 func respondToSwipeGesture(gesture: UIGestureRecognizer) {
 	if let swipeGesture = gesture as? UISwipeGestureRecognizer {
 		let direction = swipeGesture.direction
@@ -217,21 +228,25 @@ func respondToSwipeGesture(gesture: UIGestureRecognizer) {
 			print("Swiped right")
 			mainLabel.text = "Right..."
 			move(Operation.turnRight)
+			speak("Turn right")
 			break
 		case [.down]:
 			print("Swiped down")
 			mainLabel.text = "Down..."
 			move(Operation.backward)
+			speak("Go backward")
 			break
 		case [.left]:
 			print("Swiped left")
 			mainLabel.text = "Left..."
 			move(Operation.turnLeft)
+			speak("Turn left")
 			break
 		case [.up]:
 			print("Swiped up")
 			mainLabel.text = "Up..."
 			move(Operation.forward)
+			speak("Go forward")
 			break
 		default:
 			break
@@ -246,6 +261,7 @@ func respondToDoubleTapped() {
 	print("Double tapped")
 	mainLabel.text = "Stop..."
 	move(Operation.stop)
+	speak("Stop")
 	//#-end-editable-code
 }
 
