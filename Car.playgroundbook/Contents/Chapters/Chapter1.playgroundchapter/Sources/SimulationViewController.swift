@@ -3,6 +3,8 @@ import SpriteKit
 import Foundation
 
 public class SimulationViewController: UIViewController {
+	var skView: SKView!
+
 	var carNode: SKSpriteNode!
 
 	var timeNeedToWait: Double = 0.0		// important!
@@ -18,23 +20,28 @@ public class SimulationViewController: UIViewController {
 		super.viewDidAppear(animated)
 
 
-		let skView = SKView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
-		self.view.addSubview(skView)
+		let largerFrame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+		self.skView = SKView(frame: largerFrame)
+		if self.skView.isDescendant(of: self.view) {
+			self.skView.removeFromSuperview()
+		}
+		self.view.addSubview(self.skView)
 
 
-		let scene = SKScene(size: CGSize(width: skView.frame.width, height: skView.frame.height))
+		let scene = SKScene(size: largerFrame.size)
 		scene.scaleMode = .aspectFit
 
-		scene.physicsBody = SKPhysicsBody(edgeLoopFrom: scene.frame)
+		scene.physicsBody = SKPhysicsBody(edgeLoopFrom: largerFrame)
 		scene.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
 		scene.physicsBody?.friction = 0.0
 
 		skView.presentScene(scene)
 
 
-		self.carNode = SKSpriteNode(color: SKColor.red, size: CGSize(width: 50, height: 100))
+		let carSize = CGSize(width: 50, height: 100)
+		self.carNode = SKSpriteNode(color: SKColor.red, size: carSize)
 		self.carNode.position = CGPoint(x: skView.frame.width/2, y: skView.frame.height/2)
-		self.carNode.physicsBody = SKPhysicsBody(rectangleOf: self.carNode.frame.size)
+		self.carNode.physicsBody = SKPhysicsBody(rectangleOf: carSize)
 		self.carNode.physicsBody?.restitution = 1
 		self.carNode.physicsBody?.friction = 0.0
 		self.carNode.physicsBody?.angularDamping = 0
