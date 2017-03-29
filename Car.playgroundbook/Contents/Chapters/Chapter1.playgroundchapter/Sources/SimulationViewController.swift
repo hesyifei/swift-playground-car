@@ -228,9 +228,6 @@ class CarScene: SKScene {
 
 
 			distanceToWall = resultDistance
-
-			NotificationCenter.default.post(name: NotificationName.simulationSentDistance, object: ["distance": distanceToWall])
-
 		} else if let carNode = self.childNode(withName: "Car") as? SKSpriteNode {
 			self.carNode = carNode
 		}

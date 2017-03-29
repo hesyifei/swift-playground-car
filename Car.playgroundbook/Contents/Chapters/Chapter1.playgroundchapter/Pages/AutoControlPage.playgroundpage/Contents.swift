@@ -15,6 +15,8 @@ To begin with, we can add a `Timer`.
 import UIKit
 import PlaygroundSupport
 
+var simulationViewController = SimulationViewController()
+
 public class Operation {
 	public static let forward = CarOperation.forward
 	public static let backward = CarOperation.backward
@@ -105,7 +107,11 @@ startTimer()		// this function is called after your iPad is successfully connect
 	}
 
 	func getCurrentDistanceInFront() -> Int {
-		return ble.currentDistance
+		if UserDefaults.standard.bool(forKey: "hasRealCar") {
+			return ble.currentDistance
+		} else {
+			return Int(simulationViewController.getDistanceToWall())
+		}
 	}
 
 //#-end-hidden-code
@@ -150,7 +156,12 @@ func stopTimer() {
 let viewControllerOri = ViewController()
 let viewController = UINavigationController(rootViewController: viewControllerOri)
 
-let controller = OuterViewController(upperViewController: viewController, lowerViewController: SimulationViewController())
+// simulationViewController is defined at front
+
+var controller: UIViewController = OuterViewController(upperViewController: viewController, lowerViewController: simulationViewController)
+if UserDefaults.standard.bool(forKey: "hasRealCar") {
+	controller = viewController
+}
 
 PlaygroundPage.current.liveView = controller
 PlaygroundPage.current.needsIndefiniteExecution = true

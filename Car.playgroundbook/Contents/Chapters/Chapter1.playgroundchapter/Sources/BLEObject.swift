@@ -18,7 +18,6 @@ public class NotificationName {
 	public static let didDisconnectPeripheral = Notification.Name("didDisconnectPeripheral")
 
 	public static let simulationReceivedCommand = Notification.Name("simulationReceivedCommand")
-	public static let simulationSentDistance = Notification.Name("simulationSentDistance")
 }
 
 public class BLEObject: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
@@ -69,17 +68,6 @@ public class BLEObject: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
 			}
 		} else {
 			NotificationCenter.default.post(name: NotificationName.didLinkUpToCharacteristic, object: nil)
-
-			NotificationCenter.default.removeObserver(self, name: NotificationName.simulationSentDistance, object: nil)
-			NotificationCenter.default.addObserver(self, selector: #selector(self.simulationSentDistance(_:)), name: NotificationName.simulationSentDistance, object: nil)
-		}
-	}
-
-	func simulationSentDistance(_ notification: NSNotification){
-		if let object = notification.object as? [String: Any] {
-			if let distance = object["distance"] as? Double {
-				self.currentDistance = Int(distance)
-			}
 		}
 	}
 
