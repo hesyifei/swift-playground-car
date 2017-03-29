@@ -209,7 +209,7 @@ Now it's time to handle the gestures! The `move` function is changed slightly co
 
 ### Final Quest
 
-1. Use suitable function to control the car. (Hint: `switch`)
+1. Use suitable function to control the car. (Hint: `switch`, `direction`, `[.right]`, etc.)
 2. Display current action in `mainLabel` and also `print()` out current action for debug.
 3. Perform at least 10 operations with swipes and taps.
 

@@ -191,11 +191,11 @@ func runCommand(_ cmd: String) {
 
 After we finish the basic function above, it's time to run!
 
-    move(.forward, for: 3.5)   // move the car forward for 3.5 seconds
-	move(.backward, for: 2)    // move the car backward for 2 seconds
-	move(.turnLeft, for: 1)    // turn left the car for 1 second
-	move(.turnRight, for: 2)   // turn right the car for 2 seconds
-	wait(for: 1.5)             // wait for 1.5 seconds until next operation
+    move(Operation.forward, for: 3.5)   // move the car forward for 3.5 seconds
+	move(Operation.backward, for: 2)    // move the car backward for 2 seconds
+	move(Operation.turnLeft, for: 1)    // turn left the car for 1 second
+	move(Operation.turnRight, for: 2)   // turn right the car for 2 seconds
+	wait(for: 1.5)                      // wait for 1.5 seconds until next operation
 
 ## Quest
 
