@@ -41,7 +41,8 @@ weak var timer: Timer?
 	override func viewDidLoad(){
 		super.viewDidLoad()
 		self.title = "Auto car!"
-		//self.view.backgroundColor = UIColor.white
+		self.view.backgroundColor = UIColor.white
+
 		mainLabel = UILabel()
 		mainLabel.translatesAutoresizingMaskIntoConstraints = false
 		mainLabel.text = "Connecting..."
