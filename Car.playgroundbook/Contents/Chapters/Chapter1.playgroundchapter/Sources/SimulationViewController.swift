@@ -9,6 +9,9 @@ public class SimulationViewController: UIViewController {
 
 	var timeNeedToWait: Double = 0.0		// important!
 
+	var carAdded = false
+	var smallestSize: CGSize!
+
 	public override func viewDidLoad() {
 		super.viewDidLoad()
 
@@ -16,38 +19,54 @@ public class SimulationViewController: UIViewController {
 		NotificationCenter.default.addObserver(self, selector: #selector(self.simulationReceivedCommand(_:)), name: NotificationName.simulationReceivedCommand, object: nil)
 	}
 
-	public override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
+	public override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
 
-
-		let largerFrame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
-		self.skView = SKView(frame: largerFrame)
-		if self.skView.isDescendant(of: self.view) {
-			self.skView.removeFromSuperview()
+		// to avoid bug as viewDidLayoutSubviews may be called more than once
+		// without this code the view will be added twice and problem arise
+		if let smallestSize = smallestSize {
+			if smallestSize.width > self.view.frame.width {
+				skView.removeFromSuperview()
+				carAdded = false
+			}
 		}
-		self.view.addSubview(self.skView)
+
+		if carAdded == false {
+			let largerFrame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+			self.skView = SKView(frame: largerFrame)
+			if self.skView.isDescendant(of: self.view) {
+				self.skView.removeFromSuperview()
+			}
+			self.view.addSubview(self.skView)
+
+			smallestSize = largerFrame.size
 
 
-		let scene = SKScene(size: largerFrame.size)
-		scene.scaleMode = .aspectFit
+			let scene = SKScene(size: largerFrame.size)
+			scene.scaleMode = .aspectFit
 
-		scene.physicsBody = SKPhysicsBody(edgeLoopFrom: largerFrame)
-		scene.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
-		scene.physicsBody?.friction = 0.0
+			scene.physicsBody = SKPhysicsBody(edgeLoopFrom: largerFrame)
+			scene.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+			scene.physicsBody?.friction = 0.0
 
-		skView.presentScene(scene)
+			skView.presentScene(scene)
 
 
-		let carSize = CGSize(width: 50, height: 100)
-		self.carNode = SKSpriteNode(color: SKColor.red, size: carSize)
-		self.carNode.position = CGPoint(x: skView.frame.width/2, y: skView.frame.height/2)
-		self.carNode.physicsBody = SKPhysicsBody(rectangleOf: carSize)
-		self.carNode.physicsBody?.restitution = 1
-		self.carNode.physicsBody?.friction = 0.0
-		self.carNode.physicsBody?.angularDamping = 0
-		self.carNode.physicsBody?.linearDamping = 0
+			// 600.0 * 1255.0 is the car's image's size
+			let carSize = CGSize(width: 50.0, height: 50.0/(600.0/1255.0))
+			self.carNode = SKSpriteNode(color: SKColor.red, size: carSize)
+			self.carNode.texture = SKTexture(imageNamed: "Car")
+			self.carNode.position = CGPoint(x: skView.frame.width/2, y: skView.frame.height/2)
+			self.carNode.physicsBody = SKPhysicsBody(rectangleOf: carSize)
+			self.carNode.physicsBody?.restitution = 1
+			self.carNode.physicsBody?.friction = 0.0
+			self.carNode.physicsBody?.angularDamping = 0
+			self.carNode.physicsBody?.linearDamping = 0
 
-		scene.addChild(self.carNode)
+			scene.addChild(self.carNode)
+			
+			carAdded = true
+		}
 	}
 
 	final let RUN_KEY = "runKey"
