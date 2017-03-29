@@ -3,17 +3,14 @@
 
 Tired of controlling your car manually? Let's try do this automatically!
 
-The essenial part of an autonomous car is automatically go away from obstacles ahead. To achieve this, we can add a ultrasonic sensor at the front of the car and the distance obtained by it (in cm) will send to your iPad through BLE.
+The essenial part of an autonomous car is automatically go away from obstacles ahead. To achieve this, we will add a ultrasonic sensor at the front of the car and the distance obtained by it (in cm) will send to your iPad through BLE.
 
 In this page, you are going to learn how to achieve this particular useful function!
 
-Oh, and don't forget to run your code every time you finish a quest! 😜
-
 ## Timer
 
-To begin with, we can add a `Timer` that allow you to do some action every `x` seconds.
+To begin with, we can add a `Timer`.
 */
-
 //#-hidden-code
 import UIKit
 import PlaygroundSupport
@@ -101,11 +98,10 @@ weak var timer: Timer?
 	func didLinkUpToCharacteristic() {
 		print("recieved connectedToCharacteristic")
 
-		//#-end-hidden-code
-		startTimer()
-
-		//#-hidden-code
-		mainLabel.text = "SUCessfully"
+//#-end-hidden-code
+startTimer()		// this function is called after your iPad is successfully connected to your car.
+//#-hidden-code
+		mainLabel.text = "Connected :)"
 	}
 
 	func getCurrentDistanceInFront() -> Int {
@@ -114,15 +110,20 @@ weak var timer: Timer?
 
 //#-end-hidden-code
 /*:
+Then we can use function `Timer.scheduledTimer()` function to allow you to do some actions every `x` seconds.
+
 ## Quest
-Simply do whatever you want to let car go away from obstacles.
+Simply do whatever you want to let car run away from obstacles. (It may sound easy, just try! 🤗)
+
+The following are some function that you may found useful.
 
     self.getCurrentDistanceInFront()       // this function will return current distance between your car and the obstacle in front of it in cm
 	self.move(Operation.forward)           // this will make your car move forward forever
-	self.move(Operation.forward, for: 5)           // this will make your car move forward for 5 seconds
+	self.move(Operation.turnLeft, for: 5)  // this will make your car turn left for 5 seconds
 */
 func startTimer() {
 	timer = Timer.scheduledTimer(withTimeInterval: /*#-editable-code */0.01/*#-end-editable-code */, repeats: true) { (_) in
+		self.mainLabel.text = "\(self.getCurrentDistanceInFront()) cm"
 		//#-code-completion(everything, hide)
 		//#-code-completion(currentmodule, hide)
 		//#-code-completion(identifier, show, self, print(_:), getCurrentDistanceInFront(), move(_:), wait(for:), Operation, ., forward, backward, turnLeft, turnRight, if, for, while, =, <, >, ==, !=, +, -, true, false, &&, ||, !)
@@ -139,6 +140,7 @@ func startTimer() {
 	}
 }
 
+// before the app stop, we have to stop the timer first :)
 func stopTimer() {
 	timer?.invalidate()
 }
