@@ -4,6 +4,7 @@ import Foundation
 
 public class SimulationViewController: UIViewController {
 	var skView: SKView!
+	var scene: CarScene!
 
 	var carNode: SKSpriteNode!
 
@@ -40,7 +41,7 @@ public class SimulationViewController: UIViewController {
 			smallestSize = largerFrame.size
 
 
-			let scene = SKScene(size: largerFrame.size)
+			scene = CarScene(size: largerFrame.size)
 			scene.scaleMode = .aspectFit
 
 			scene.physicsBody = SKPhysicsBody(edgeLoopFrom: largerFrame)
@@ -53,6 +54,7 @@ public class SimulationViewController: UIViewController {
 			// 600.0 * 1255.0 is the car's image's size
 			let carSize = CGSize(width: 50.0, height: 50.0/(600.0/1255.0))
 			self.carNode = SKSpriteNode(color: SKColor.red, size: carSize)
+			self.carNode.name = "Car"
 			self.carNode.texture = SKTexture(imageNamed: "Car")
 			self.carNode.position = CGPoint(x: skView.frame.width/2, y: skView.frame.height/2)
 			self.carNode.physicsBody = SKPhysicsBody(rectangleOf: carSize)
@@ -136,6 +138,101 @@ public class SimulationViewController: UIViewController {
 					}
 				}
 			}
+		}
+	}
+
+	public func getDistanceToWall() -> Double {
+		return scene.distanceToWall
+	}
+}
+
+class CarScene: SKScene {
+	public var distanceToWall: Double = 0.0
+
+	internal var carNode: SKSpriteNode?
+
+	//internal var linePointingShape: SKShapeNode!
+
+	override func update(_ currentTime: TimeInterval) {
+		if let carNode = self.carNode {
+
+			// following code is based on testing by myself
+
+			let pRotation = Double.pi-Double(carNode.zRotation)
+			let halfCarHeight = Double(carNode.size.height/2.0)
+			let carFrontPosition = CGPoint(x: Double(carNode.position.x)-halfCarHeight*sin(pRotation), y: Double(carNode.position.y)-halfCarHeight*cos(pRotation))
+
+
+			var xDistanceFromOrigin: Double = 0.0
+			var yDistanceFromOrigin: Double = 0.0
+
+			var resultDistance: Double = Double.infinity
+			var quadrant: Int = 0
+
+			switch pRotation {
+			case (((3.0/4.0)*2.0*Double.pi)...(2.0*Double.pi)):	// Quadrant 4
+				quadrant = 4
+				xDistanceFromOrigin = Double(self.frame.maxX - carFrontPosition.x)
+				yDistanceFromOrigin = Double(carFrontPosition.y - self.frame.minY)
+			case ((Double.pi)...((3.0/4.0)*2.0*Double.pi)):		// Quadrant 1
+				quadrant = 1
+				xDistanceFromOrigin = Double(self.frame.maxX - carFrontPosition.x)
+				yDistanceFromOrigin = Double(self.frame.maxY - carFrontPosition.y)
+			case ((0.5*Double.pi)...(1.0*Double.pi)):			// Quadrant 2
+				quadrant = 2
+				xDistanceFromOrigin = Double(carFrontPosition.x - self.frame.minX)
+				yDistanceFromOrigin = Double(self.frame.maxY - carFrontPosition.y)
+			case (0...(0.5*Double.pi)):							// Quadrant 3
+				quadrant = 3
+				xDistanceFromOrigin = Double(carFrontPosition.x - self.frame.minX)
+				yDistanceFromOrigin = Double(carFrontPosition.y - self.frame.minY)
+			default:
+				break
+			}
+
+			let quadrantMaxAngleDict: [Int: Double] = [1: (3.0/4.0)*2.0, 2: 1.0, 3: 0.5, 4: 2.0]
+			let realAngle = quadrantMaxAngleDict[quadrant]!*Double.pi-pRotation
+
+			if [1, 3].contains(quadrant) {
+				let devideAngle = atan(yDistanceFromOrigin/xDistanceFromOrigin)
+				if realAngle > devideAngle {
+					resultDistance = yDistanceFromOrigin/cos(Double.pi/2.0-realAngle)
+				} else {
+					resultDistance = xDistanceFromOrigin/cos(realAngle)
+				}
+			} else if [2, 4].contains(quadrant) {
+				let devideAngle = atan(xDistanceFromOrigin/yDistanceFromOrigin)
+				if realAngle > devideAngle {
+					resultDistance = xDistanceFromOrigin/cos(Double.pi/2.0-realAngle)
+				} else {
+					resultDistance = yDistanceFromOrigin/cos(realAngle)
+				}
+			}
+
+			//resultDistance = resultDistance - 50		// debugging only
+			//print(resultDistance)
+
+
+			/*let path = CGMutablePath()
+			path.move(to: carFrontPosition)
+			path.addLine(to: CGPoint(x: Double(carFrontPosition.x)-resultDistance*sin(pRotation), y: Double(carFrontPosition.y)-resultDistance*cos(pRotation)))
+
+			if linePointingShape != nil {
+			linePointingShape.removeFromParent()
+			}
+			linePointingShape = SKShapeNode()
+			linePointingShape.path = path
+			linePointingShape.strokeColor = UIColor.white
+			linePointingShape.lineWidth = 2
+			addChild(linePointingShape)*/
+
+
+			distanceToWall = resultDistance
+
+			NotificationCenter.default.post(name: NotificationName.simulationSentDistance, object: ["distance": distanceToWall])
+
+		} else if let carNode = self.childNode(withName: "Car") as? SKSpriteNode {
+			self.carNode = carNode
 		}
 	}
 }

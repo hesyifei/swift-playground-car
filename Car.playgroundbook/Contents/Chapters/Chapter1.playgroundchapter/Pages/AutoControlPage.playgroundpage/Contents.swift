@@ -150,8 +150,8 @@ func stopTimer() {
 let viewControllerOri = ViewController()
 let viewController = UINavigationController(rootViewController: viewControllerOri)
 
-//let controller = OuterViewController(upperViewController: viewController, lowerViewController: SimulationViewController())
+let controller = OuterViewController(upperViewController: viewController, lowerViewController: SimulationViewController())
 
-PlaygroundPage.current.liveView = viewController
+PlaygroundPage.current.liveView = controller
 PlaygroundPage.current.needsIndefiniteExecution = true
 
