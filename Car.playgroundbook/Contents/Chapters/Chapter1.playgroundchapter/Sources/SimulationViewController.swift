@@ -7,8 +7,6 @@ public class SimulationViewController: UIViewController {
 
 	var carNode: SKSpriteNode!
 
-	var timeNeedToWait: Double = 0.0		// important!
-
 	var carAdded = false
 	var smallestSize: CGSize!
 
@@ -78,55 +76,48 @@ public class SimulationViewController: UIViewController {
 
 		var sec = oriSec
 		if isForever {
-			timeNeedToWait = 0
 			sec = 1
 		}
-		HelperFunc.delay(bySeconds: timeNeedToWait) {
-			let msec: Int = Int(sec*1000)
 
-			switch operation {
-			case CarOperation.forward, CarOperation.backward:
-				let length = 0.1*Double(msec)
+		let msec: Int = Int(sec*1000)
 
-				let zRotation = Double.pi-Double(self.carNode.zRotation)
+		switch operation {
+		case CarOperation.forward, CarOperation.backward:
+			let length = 0.1*Double(msec)
 
-				var moveVector = CGVector(dx: -length*sin(zRotation), dy: -length*cos(zRotation))
-				if operation == CarOperation.backward {
-					moveVector = CGVector(dx: length*sin(zRotation), dy: length*cos(zRotation))
-				}
-				if isForever {
-					self.carNode.run(SKAction.repeatForever(SKAction.move(by: moveVector, duration: sec)), withKey: self.RUN_KEY)
-				} else {
-					self.carNode.run(SKAction.move(by: moveVector, duration: sec))
-				}
-				break
-			case CarOperation.turnLeft, CarOperation.turnRight:
-				var angle = CGFloat(0.001*Double(msec))
+			let zRotation = Double.pi-Double(self.carNode.zRotation)
 
-				if operation == CarOperation.turnLeft {
-
-				} else if operation == CarOperation.turnRight {
-					angle = -angle
-				}
-
-				if isForever {
-					self.carNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: angle, duration: sec)), withKey: self.RUN_KEY)
-				} else {
-					self.carNode.run(SKAction.rotate(byAngle: angle, duration: sec))
-				}
-				break
-			case CarOperation.stop:
-				self.carNode.removeAction(forKey: self.RUN_KEY)
-				break
-			default:
-				break
+			var moveVector = CGVector(dx: -length*sin(zRotation), dy: -length*cos(zRotation))
+			if operation == CarOperation.backward {
+				moveVector = CGVector(dx: length*sin(zRotation), dy: length*cos(zRotation))
 			}
-		}
-		wait(for: sec)                                // wait until this movement is finished to do the next one
-	}
+			if isForever {
+				self.carNode.run(SKAction.repeatForever(SKAction.move(by: moveVector, duration: sec)), withKey: self.RUN_KEY)
+			} else {
+				self.carNode.run(SKAction.move(by: moveVector, duration: sec))
+			}
+			break
+		case CarOperation.turnLeft, CarOperation.turnRight:
+			var angle = CGFloat(0.001*Double(msec))
 
-	func wait(for sec: Double) {
-		timeNeedToWait = timeNeedToWait + sec
+			if operation == CarOperation.turnLeft {
+
+			} else if operation == CarOperation.turnRight {
+				angle = -angle
+			}
+
+			if isForever {
+				self.carNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: angle, duration: sec)), withKey: self.RUN_KEY)
+			} else {
+				self.carNode.run(SKAction.rotate(byAngle: angle, duration: sec))
+			}
+			break
+		case CarOperation.stop:
+			self.carNode.removeAction(forKey: self.RUN_KEY)
+			break
+		default:
+			break
+		}
 	}
 
 	func simulationReceivedCommand(_ notification: NSNotification){
