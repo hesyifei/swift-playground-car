@@ -137,7 +137,7 @@ func startTimer() {
 		//#-code-completion(keyword, if)
 		//#-editable-code Tap to enter code
 		print(self.getCurrentDistanceInFront())
-		if self.getCurrentDistanceInFront() > 25 {
+		if self.getCurrentDistanceInFront() < 25 {
 			self.move(Operation.backward, for: 0.2)
 			self.move(Operation.turnLeft, for: 0.2)
 		} else {
