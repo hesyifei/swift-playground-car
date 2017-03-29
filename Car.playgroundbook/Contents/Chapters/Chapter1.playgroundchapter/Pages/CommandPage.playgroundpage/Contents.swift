@@ -33,6 +33,7 @@ enum Operation: String {
 	case backward = /*#-editable-code */"b"/*#-end-editable-code*/
 	case turnLeft = /*#-editable-code */"l"/*#-end-editable-code*/
 	case turnRight = /*#-editable-code */"r"/*#-end-editable-code*/
+	case stop = /*#-editable-code */"s"/*#-end-editable-code*/
 }
 //#-hidden-code
 
@@ -84,6 +85,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 		UserDefaults.standard.set(Operation.backward.rawValue, forKey: "oBackward")
 		UserDefaults.standard.set(Operation.turnLeft.rawValue, forKey: "oTurnLeft")
 		UserDefaults.standard.set(Operation.turnRight.rawValue, forKey: "oTurnRight")
+		UserDefaults.standard.set(Operation.stop.rawValue, forKey: "oStop")
 	}
 
 
