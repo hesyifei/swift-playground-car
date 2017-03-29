@@ -204,6 +204,9 @@ After we finish the basic function above, it's time to run!
 */
 // You will control your device in this function
 func controlDevice() {
+	//#-hidden-code
+	wait(for: 2)			// wait for better performance
+	//#-end-hidden-code
 	//#-code-completion(everything, hide)
 	//#-code-completion(currentmodule, hide)
 	//#-code-completion(identifier, show, move(_:for:), wait(for:), Operation, ., forward, backward, turnLeft, turnRight, if, for, while, =, <, >, ==, !=, +, -, true, false, &&, ||, !)
