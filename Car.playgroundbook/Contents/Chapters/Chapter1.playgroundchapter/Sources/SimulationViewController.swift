@@ -142,7 +142,11 @@ public class SimulationViewController: UIViewController {
 	}
 
 	public func getDistanceToWall() -> Double {
-		return scene.distanceToWall
+		if self.scene != nil {
+			return self.scene!.distanceToWall
+		} else {
+			return 1000.0
+		}
 	}
 }
 
@@ -166,7 +170,7 @@ class CarScene: SKScene {
 			var xDistanceFromOrigin: Double = 0.0
 			var yDistanceFromOrigin: Double = 0.0
 
-			var resultDistance: Double = Double.infinity
+			var resultDistance: Double = 1000.0
 			var quadrant: Int = 0
 
 			switch pRotation {
