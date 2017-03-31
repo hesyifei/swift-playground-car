@@ -143,7 +143,7 @@ public class SimulationViewController: UIViewController {
 
 	public func getDistanceToWall() -> Double {
 		if self.scene != nil {
-			return self.scene!.distanceToWall
+			return self.scene!.getDistanceToWall()
 		} else {
 			return 1000.0
 		}
@@ -151,13 +151,11 @@ public class SimulationViewController: UIViewController {
 }
 
 class CarScene: SKScene {
-	public var distanceToWall: Double = 0.0
-
 	internal var carNode: SKSpriteNode?
 
 	//internal var linePointingShape: SKShapeNode!
 
-	override func update(_ currentTime: TimeInterval) {
+	func getDistanceToWall() -> Double {
 		if let carNode = self.carNode {
 
 			// following code is based on testing by myself
@@ -231,9 +229,10 @@ class CarScene: SKScene {
 			addChild(linePointingShape)*/
 
 
-			distanceToWall = resultDistance
+			return resultDistance
 		} else if let carNode = self.childNode(withName: "Car") as? SKSpriteNode {
 			self.carNode = carNode
 		}
+		return 1000.0
 	}
 }
