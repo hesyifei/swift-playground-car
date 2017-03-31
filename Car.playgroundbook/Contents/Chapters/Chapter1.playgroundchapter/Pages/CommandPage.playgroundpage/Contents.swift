@@ -17,7 +17,7 @@ Just imagine you meet a foreigner who doesn't understand English. So you two dec
 
 Now your car said _"Oh I think the format `<cmd time>` is very comprehensible!"_ and you are like _"Yeah! That's a good idea! Why don't we use `f`, `b`, `l` and `r` as `cmd` and use milliseconds for `time`?"_
 
-But how can we do that technically? It's very easy in Swift. We will use [enum](glossary://enum) to define the specfic set of commands and use the following commands to control the car
+But how can we do that technically? It's very easy in Swift. We will use [enumeration](glossary://enumeration) `enum` to define the specfic set of commands and use the following commands to control the car
 
     <f2000>        move forward for 2000 milliseconds
     <b1500>        move backward for 1500 milliseconds
@@ -173,9 +173,9 @@ Now you two have a common ground.
 
 But remember that the car don't understand English? Letters like `f` and `b` are still English and the car find it very difficult to recognize the alphabets!
 
-Fortunately, you two both understand a "language"¹ named [HEX](glossary://HEX). So you will have to "encode" your command in HEX format and the car will "decode" the command to whatever "language" it used.
+Fortunately, you two both understand a "language"¹ named [hexadecimal](glossary://hexadecimal) (hex). So you will have to "encode" your command in HEX format and the car will "decode" the command to whatever "language" it used.
 
-_¹ Note: HEX isn't really a language._
+_¹ Note: Hexadecimal isn't really a language._
 */
 // Convert English into HEX
 func convertCommand(_ cmd: String) -> Data {

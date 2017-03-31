@@ -9,7 +9,7 @@ Oh, and don't forget to run your code every time you finish a quest! 😜
 
 ## The basic
 
-Each page of an app you used is a **[View Controller](glossary://ViewController)**, in which there are buttons, labels, text fields, etc. To begin with, you have to create the view:
+Each page of an app you used is a **[view controller](glossary://viewcontroller)**, in which there are buttons, labels, text fields, etc. To begin with, you have to create the view:
 */
 //#-hidden-code
 import UIKit
@@ -65,7 +65,7 @@ override func viewDidLoad(){
 /*:
 Now we have a title! To control a car, we also need a label (with some text) to show user how there car is running.
 
-In Swift, we can add a view (e.g. `UILabel`) to a bigger view (e.g. `view` which is the biggest view in the whole page) by `biggerView.addSubview(smallerView)`. To control the position of the label, you can either enter excat frame position or use [auto layout](glossary://autoLayout) to make the view adoptive to all devices. Details about positioning and auto layout can be found in advanced tutorial. But for now, you just have to know that what we are doing is sticking a label (`mainLabel`) to a board (`view`). 📃
+In Swift, we can add a view (e.g. `UILabel`) to a bigger view (e.g. `view` which is the biggest view in the whole page) by `biggerView.addSubview(smallerView)`. To control the position of the label, you can either enter excat frame position or use [Auto Layout](glossary://AutoLayout) to make the view adoptive to all devices. Details about positioning and auto layout can be found in advanced tutorial. But for now, you just have to know that what we are doing is sticking a label (`mainLabel`) to a board (`view`). 📃
 
 ### Quest 2
 
@@ -115,7 +115,7 @@ Add `mainLabel` which have font size 30 to `view`.
 
 //#-end-hidden-code
 /*:
-Let's recall the basic components of controlling a car: forward, backward, turn left, turn right and of course stop. To utilize the screen, let's use [swipe gesture](glossary://swipeGesture) to control the car and use double taps to stop the car. 📱
+Let's recall the basic components of controlling a car: forward, backward, turn left, turn right and of course stop. To utilize the screen, let's use [`UISwipe​Gesture​Recognizer`](glossary://USGR) to recognize swipe gesture to will be used to control the car and use [`UITapGestureRecognizer`](glossary://UITapGestureRecognizer) to recognize double taps which will be used to stop the car. 📱
 
 ### Learn
 
