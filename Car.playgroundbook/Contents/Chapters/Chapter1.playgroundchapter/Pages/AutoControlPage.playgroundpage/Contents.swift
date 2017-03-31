@@ -69,9 +69,12 @@ weak var timer: Timer?
 
 	// Control the car
 	func move(_ operation: String) {
-		let yourCommand = "<\(operation)>"
-		NotificationCenter.default.post(name: NotificationName.simulationReceivedCommand, object: ["cmd": yourCommand])
-		self.runCommand(yourCommand)                  // run the command
+		HelperFunc.delay(bySeconds: timeNeedToWait) { // wait until last movement is finished to do the next one
+			let yourCommand = "<\(operation)>"
+			NotificationCenter.default.post(name: NotificationName.simulationReceivedCommand, object: ["cmd": yourCommand])
+			self.runCommand(yourCommand)                  // run the command
+		}
+		timeNeedToWait = 0.0
 	}
 	func move(_ operation: String, for sec: Double) {
 		let msec: Int = Int(sec*1000)                 // 1 second = 1000 milliseconds
@@ -129,15 +132,18 @@ The following are some function that you may found useful.
 	self.move(Operation.turnLeft, for: 5)  // this will make your car turn left for 5 seconds
 */
 func startTimer() {
-	timer = Timer.scheduledTimer(withTimeInterval: /*#-editable-code */0.01/*#-end-editable-code */, repeats: true) { (_) in
+	timer = Timer.scheduledTimer(withTimeInterval: /*#-editable-code */0.1/*#-end-editable-code */, repeats: true) { (_) in
 		self.mainLabel.text = "\(self.getCurrentDistanceInFront()) cm"
+		//#-hidden-code
+		self.timeNeedToWait = 0.0
+		//#-end-hidden-code
 		//#-code-completion(everything, hide)
 		//#-code-completion(currentmodule, hide)
 		//#-code-completion(identifier, show, self, print(_:), getCurrentDistanceInFront(), move(_:), wait(for:), Operation, ., forward, backward, turnLeft, turnRight, if, for, while, =, <, >, ==, !=, +, -, true, false, &&, ||, !)
 		//#-code-completion(keyword, if)
 		//#-editable-code Tap to enter code
 		print(self.getCurrentDistanceInFront())
-		if self.getCurrentDistanceInFront() < 25 {
+		if self.getCurrentDistanceInFront() < 50 {
 			self.move(Operation.backward, for: 0.2)
 			self.move(Operation.turnLeft, for: 0.2)
 		} else {
