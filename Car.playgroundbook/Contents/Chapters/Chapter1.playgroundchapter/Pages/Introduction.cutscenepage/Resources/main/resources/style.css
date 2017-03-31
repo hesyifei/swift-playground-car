@@ -1,0 +1,36 @@
+html, body {
+	font-size: 100%;
+	font-family: -apple-system, helvetica, sans-serif;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	background-color: white;
+	margin: 0;
+	height: 100%;
+}
+
+pre, code {
+	white-space: pre;
+	speak: literal-punctuation;
+	font-family: "SFMono-Regular", monaco, monospace;
+}
+
+
+.fullScreenCenter {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+}
+
+#startButton {
+	color: #FE4B26;
+	text-align: center;
+	text-decoration: none;
+	font-size: 16px;
+}

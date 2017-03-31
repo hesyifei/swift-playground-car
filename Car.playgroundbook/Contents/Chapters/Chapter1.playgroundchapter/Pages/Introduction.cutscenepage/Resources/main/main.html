@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="chrome=1, IE=edge" />
+<title>Car</title>
+<meta name="viewport" content="user-scalable=no, width=1024" />
+<link rel="stylesheet" type="text/css" href="resources/style.css" />
+<script src="resources/jquery-3.2.0.min.js"></script>
+</head>
+<body>
+<div class="fullScreenCenter" style="display: none;">
+	<span id="title" style="font-size: 400%; font-weight: 100;">Car</span><br />
+	<img src="resources/RealCar.png" style="margin-top: 30px; margin-bottom: 30px; width: auto; height: 200px;" /><br />
+	<span><a id="startButton" href="@next" style="font-size: 1.2rem;"><code>Move Forward</code></a></span>
+</div>
+<div class="carImage" style="display: none;"><img src="resources/Car.png" style="width: 50px; height: auto;" /></div>
+
+<script>
+$.fn.animateRotate = function(startAngle, endAngle, duration, easing, complete){
+	return this.each(function(){
+		var elem = $(this);
+
+		$({deg: startAngle}).animate({deg: endAngle}, {
+			duration: duration,
+			easing: easing,
+			step: function(now){
+				elem.css({
+				  '-moz-transform':'rotate('+now+'deg)',
+				  '-webkit-transform':'rotate('+now+'deg)',
+				  '-o-transform':'rotate('+now+'deg)',
+				  '-ms-transform':'rotate('+now+'deg)',
+				  'transform':'rotate('+now+'deg)'
+				});
+			},
+			complete: complete || $.noop
+		});
+	});
+};
+
+var rotation = 0;
+$(document).ready(function() {
+	setTimeout(function() {
+		$('.fullScreenCenter').css("marginTop", "200px")
+		.fadeIn({queue: false, duration: 'slow'})
+		.animate({ "marginTop": "0px" }, 'slow');
+	}, 2000);
+
+
+	var speed = $(window).height()/1500;
+	var top = 50;
+	var leftMostLeft = 50+$(".carImage img").width();
+	var leftMostTop = $(window).height()-$(".carImage img").height()*3-50*2-top-10;
+
+	function loop() {
+		$(".carImage").show()
+		.css({left: leftMostLeft, top: leftMostTop, position:'absolute'})
+		// left-up
+		.animate({top: top}, $(window).height()/speed, function() {
+			$(".carImage").animateRotate(rotation, rotation += 90)
+			// top-right
+			.animate({left: $(window).width()-$(".carImage img").width()*2-50}, $(window).width()/speed, function() {
+				$(".carImage").animateRotate(rotation, rotation += 90)
+				// right-down
+				.animate({top: leftMostTop}, $(window).height()/speed, function() {
+					$(".carImage").animateRotate(rotation, rotation += 90)
+					// down-left
+					.animate({left: leftMostLeft}, $(window).width()/speed, function() {
+						rotation = -90
+						$(".carImage").animateRotate(rotation, rotation += 90)
+						loop();
+					});
+				});
+			});
+		});
+	}
+	loop();
+});
+</script>
+</body>
+</html>

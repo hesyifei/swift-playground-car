@@ -8,6 +8,7 @@
 	<string>Your First Car</string>
 	<key>Pages</key>
 	<array>
+		<string>Introduction.cutscenepage</string>
 		<string>StartPage.playgroundpage</string>
 		<string>CommandPage.playgroundpage</string>
 		<string>UIControlPage.playgroundpage</string>
