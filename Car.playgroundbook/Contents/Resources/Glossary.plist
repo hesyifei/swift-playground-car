@@ -39,6 +39,11 @@
 			<key>Definition</key>
 			<string>A human-readable string that that describes the view. If the view controller has a navigation item or tab-bar item, changing `title` also updates the title text of those bars.</string>
 		</dict>
+		<key>Timer</key>
+		<dict>
+			<key>Definition</key>
+			<string>You use the `Timer` class to create timer objects or, more simply, timers. You specify whether a timer is repeating or non-repeating at creation time. A non-repeating timer fires once and then invalidates itself automatically, thereby preventing the timer from firing again. By contrast, a repeating timer fires and then reschedules itself on the same run loop.</string>
+		</dict>
 		<key>viewcontroller</key>
 		<dict>
 			<key>Definition</key>

@@ -1,15 +1,11 @@
 /*:
 # An autonomous car?! 🚘
 
-Tired of controlling your car manually? Let's try do this automatically!
+Tired of controlling your car manually? Let's try to do this automatically!
 
-The essenial part of an autonomous car is automatically go away from obstacles ahead. To achieve this, we will add a ultrasonic sensor at the front of the car and the distance obtained by it (in cm) will send to your iPad through BLE.
+An essential feature of an autonomous car is automatically staying away from obstacles ahead. To achieve this, we've added an ultrasonic sensor at the front of the car and the distance obtained by it (in cm) will be sent back to your iPad through BLE.
 
 In this page, you are going to learn how to achieve this particular useful function!
-
-## Timer
-
-To begin with, we can add a `Timer`.
 */
 //#-hidden-code
 import UIKit
@@ -31,8 +27,12 @@ class ViewController: UIViewController {
 
 	// must init here
 	let ble = BLEObject()
-
 //#-end-hidden-code
+/*:
+## Timer
+
+To begin with, we can add a [`Timer`](glossary://Timer).
+*/
 weak var timer: Timer?
 //#-hidden-code
 
@@ -120,7 +120,7 @@ startTimer()		// this function is called after your iPad is successfully connect
 
 //#-end-hidden-code
 /*:
-Then we can use function `Timer.scheduledTimer()` function to allow you to do some actions every `x` seconds.
+Then we can use function `Timer.scheduledTimer()` function to set up a repeating timer which allow you to do some actions every `x` seconds.
 
 ## Quest
 Simply do whatever you want to let car run away from obstacles. (It may sound easy, just try! 🤗)
@@ -133,6 +133,7 @@ The following are some function that you may found useful.
 */
 func startTimer() {
 	timer = Timer.scheduledTimer(withTimeInterval: /*#-editable-code */0.1/*#-end-editable-code */, repeats: true) { (_) in
+		// code following will be run every `TimeInterval` seconds.
 		self.mainLabel.text = "\(self.getCurrentDistanceInFront()) cm"
 		//#-hidden-code
 		self.timeNeedToWait = 0.0
@@ -154,7 +155,7 @@ func startTimer() {
 	}
 }
 
-// before the app stop, we have to stop the timer first :)
+// before the app stop, we have to stop the timer first. Can't left a counting watch, can we? :)
 func stopTimer() {
 	timer?.invalidate()
 }

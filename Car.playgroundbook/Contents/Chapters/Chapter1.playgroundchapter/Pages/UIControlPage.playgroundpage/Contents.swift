@@ -9,7 +9,7 @@ Oh, and don't forget to run your code every time you finish a quest! 😜
 
 ## The basic
 
-Each page of an app you used is a **[view controller](glossary://viewcontroller)**, in which there are buttons, labels, text fields, etc. To begin with, you have to create the view:
+Each page of an app you used is a **[view controller](glossary://viewcontroller)**, in which there are buttons, labels, text fields, etc. To begin with, you have to create the view controller:
 */
 //#-hidden-code
 import UIKit
@@ -37,7 +37,7 @@ class ViewController: UIViewController {
 /*:
 But you can't just have an empty page. Let's do something to initialize the page!
 
-In Swift, you can use `override func viewDidLoad()` to initialize a view controller, in which you can change `title`'s value to set the **[title](glossary://title)** of the view controller. ⚙️
+In Swift, you can `override` the `func viewDidLoad()` to **initialize a view controller**. For example, in this function you can change the variable `title` to set the **[title](glossary://title)** of this view controller. ⚙️
 
 ### Quest 1
 
@@ -46,7 +46,7 @@ Set your view's title to anything that contain the word "car".
 var mainLabel: UILabel!
 
 override func viewDidLoad(){
-	super.viewDidLoad()
+	super.viewDidLoad()    // Don't forget this. You still need to call the original function first, even if you are overriding it :)
 	//#-code-completion(everything, hide)
 	//#-code-completion(currentmodule, hide)
 	//#-code-completion(identifier, show, =, ., self, title)
@@ -63,13 +63,15 @@ override func viewDidLoad(){
 		self.view.backgroundColor = UIColor.white
 //#-end-hidden-code
 /*:
-Now we have a title! To control a car, we also need a label (with some text) to show user how there car is running.
+Now we have a title! To control a car, it'll be great if a label (with some text) showing user how there car is running is on the screen.
 
-In Swift, we can add a view (e.g. `UILabel`) to a bigger view (e.g. `view` which is the biggest view in the whole page) by `biggerView.addSubview(smallerView)`. To control the position of the label, you can either enter excat frame position or use [Auto Layout](glossary://AutoLayout) to make the view adoptive to all devices. Details about positioning and auto layout can be found in advanced tutorial. But for now, you just have to know that what we are doing is sticking a label (`mainLabel`) to a board (`view`). 📃
+In Swift, we can add a `smallerView` (e.g. `UILabel`) to a `biggerView` (e.g. `view` which is the biggest & utmost view in the whole view controller) by `biggerView.addSubview(smallerView)`. Note that `addSubview(_:)` can be called everywhere, but because of what we want is initializing the `smallerView`, we will use this piece of code in `viewDidLoad()`.
+
+To control the position of the label, you can either enter exact frame position or use [Auto Layout](glossary://AutoLayout) to make the view adaptive to all devices with different sizes. Details about positioning and auto layout can be found in the advanced tutorial. But for now, you just have to understand that what we are doing is **sticking a label (`mainLabel`) to a board (`view`)**. 📃
 
 ### Quest 2
 
-Add `mainLabel` which have font size 30 to `view`.
+Add `mainLabel` which have font size `30` to `view`.
 */
 	// we initialized variable in class already, so we don't need `let` here
 	mainLabel = UILabel()
@@ -115,15 +117,15 @@ Add `mainLabel` which have font size 30 to `view`.
 
 //#-end-hidden-code
 /*:
-Let's recall the basic components of controlling a car: forward, backward, turn left, turn right and of course stop. To utilize the screen, let's use [`UISwipe​Gesture​Recognizer`](glossary://USGR) to recognize swipe gesture to will be used to control the car and use [`UITapGestureRecognizer`](glossary://UITapGestureRecognizer) to recognize double taps which will be used to stop the car. 📱
+Let's recall the basic components of controlling a car: forward, backward, turn left, turn right and of course stop. To utilize the screen, let's use [`UISwipe​Gesture​Recognizer`](glossary://USGR) to **recognize swipe gesture** which will be used to control the car's direction and use [`UITapGestureRecognizer`](glossary://UITapGestureRecognizer) to **recognize double taps** which will be used to stop the car. 📱
 
 ### Learn
 
-We can use `#selector(self.functionName)` to indicate the action is inside `func functionName()`
+We can use `#selector(self.functionName)` to indicate the action to be taken is inside `func functionName()`.
 
 ### Quest 3
 
-Set suitable directions (`.up`, `.left`, etc.) and `numberOfTapsRequired`
+Add suitable directions (`.up`, `.left`, etc.) to `directions` array and set suitable `numberOfTapsRequired`.
 */
 //#-code-completion(everything, hide)
 //#-code-completion(currentmodule, hide)
@@ -154,7 +156,7 @@ Set suitable directions (`.up`, `.left`, etc.) and `numberOfTapsRequired`
 			PlaygroundPage.current.finishExecution()
 		}
 	//#-end-hidden-code
-}
+}      // viewDidLoad() end here
 //#-hidden-code
 
 	// Control the car
@@ -203,24 +205,24 @@ Now it's time to handle the gestures! The `move` function is changed slightly co
 
 	move(Operation.forward)     // move the car forward forever
 	move(Operation.backward)    // move the car backward forever
-	move(Operation.turnLeft)    // turn left the car forever
-	move(Operation.turnRight)   // turn right the car forever
+	move(Operation.turnLeft)    // turn left forever
+	move(Operation.turnRight)   // turn right forever
 	move(Operation.stop)        // stop the car
 
 ### Final Quest
 
-1. Use suitable function to control the car. (Hint: `switch`, `direction`, `[.right]`, etc.)
+1. Use suitable functions to control the car by swipes and taps. (Hint: `switch` & `case`, `direction`, `[.right]`, `Operation.move()`)
 2. Display current action in `mainLabel` and also `print()` out current action for debug.
 3. Perform at least 10 operations with swipes and taps.
+4. (Optional) Use function `speak(text)` to let your iPad read out the direction change.
 
-Optional: use `speak(text)` to let your iPad read out the change.
 */
 //#-code-completion(everything, hide)
 //#-code-completion(currentmodule, hide)
 //#-code-completion(identifier, show, switch, case, break, UISwipeGestureRecognizerDirection, left, right, down, up, ., print, mainLabel, text, move(_:), speak(_:), Operation, forward, backward, turnLeft, turnRight, !)
 func respondToSwipeGesture(gesture: UIGestureRecognizer) {
 	if let swipeGesture = gesture as? UISwipeGestureRecognizer {
-		let direction = swipeGesture.direction
+		let direction = swipeGesture.direction      // swipe direction may be .left, .right, .up and .down
 		//#-editable-code Tap to enter code
 		// CCHANGE
 		switch direction {
@@ -266,9 +268,13 @@ func respondToDoubleTapped() {
 }
 
 /*:
-## Try it out!
+## Try it out! 🎉
 
 Congrats! You've just finished your first app that everyone can use! Now show this to your friends and family! 🎉
+ 
+## Optional Quest 😂
+
+Don't forget to share this playground so that they can also learn and discover how fun it is too! 😉
 */
 //#-hidden-code
 }
