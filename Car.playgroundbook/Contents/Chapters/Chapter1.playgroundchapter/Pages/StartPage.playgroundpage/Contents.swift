@@ -1,7 +1,7 @@
 /*:
 # Welcome to Play Car! 😊
 
-In this Playground, you are going to be guided to control a real model car with [Bluetooth low energy](glossary://BLE) through Swift code, and also become a real developer and design and develop a controller user interface that your friends and family can play with easily!
+In this Playground, you are going to be guided to connect and control your real model car, which based on [Arduino](glossary://Arduino), with [Bluetooth low energy](glossary://BLE) through Swift code, and also become a real developer and design and develop a controller user interface that your friends and family can play with easily! Furthermore, try to make it an autonomous car!
 
 Now what are you waiting for? Let's get started by connecting your car!
 
@@ -16,7 +16,7 @@ class ViewController: UIViewController {
 	// must init here
 //#-end-hidden-code
 /*:
-Don't have a real car? Change `hasRealCar` to `false`, and we will have a virtual one on screen for you. ☺️
+*Don't have a real car? Change `hasRealCar` to `false`, and there will be a virtual one on your screen waiting for you.* ☺️
 */
 //#-code-completion(everything, hide)
 //#-code-completion(currentmodule, hide)

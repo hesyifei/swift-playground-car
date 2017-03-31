@@ -142,6 +142,7 @@ func startTimer() {
 		//#-code-completion(identifier, show, self, print(_:), getCurrentDistanceInFront(), move(_:), wait(for:), Operation, ., forward, backward, turnLeft, turnRight, if, for, while, =, <, >, ==, !=, +, -, true, false, &&, ||, !)
 		//#-code-completion(keyword, if)
 		//#-editable-code Tap to enter code
+		// BEST SOLUTION:
 		print(self.getCurrentDistanceInFront())
 		if self.getCurrentDistanceInFront() < 50 {
 			self.move(Operation.backward, for: 0.2)
