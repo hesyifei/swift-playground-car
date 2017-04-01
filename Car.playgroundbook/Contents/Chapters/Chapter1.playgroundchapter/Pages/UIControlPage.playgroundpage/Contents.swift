@@ -51,8 +51,6 @@ override func viewDidLoad(){
 	//#-code-completion(currentmodule, hide)
 	//#-code-completion(identifier, show, =, ., self, title)
 	//#-editable-code Tap to enter code
-	// CCHANGE
-	self.title = "my car"
 	//#-end-editable-code
 	//#-hidden-code
 		if self.title?.lowercased().range(of: "car") == nil {
@@ -79,15 +77,11 @@ Add `mainLabel` which have font size `30` to `view`.
 	mainLabel.translatesAutoresizingMaskIntoConstraints = false
 	mainLabel.text = "Connecting..."
 	//#-end-hidden-code
-	// CCHANGE
-	mainLabel.font = UIFont.systemFont(ofSize: 30)
-	//mainLabel.font = UIFont.systemFont(ofSize: /*#-editable-code*/<#T##font size##Double#>/*#-end-editable-code*/)
+	mainLabel.font = UIFont.systemFont(ofSize: /*#-editable-code*/<#T##font size##Double#>/*#-end-editable-code*/)
 	//#-code-completion(everything, hide)
 	//#-code-completion(currentmodule, hide)
 	//#-code-completion(identifier, show, ., self, view, addSubview(_:), mainLabel)
 	//#-editable-code Tap to enter code
-	// CCHANGE
-	self.view.addSubview(mainLabel)
 	//#-end-editable-code
 	//#-hidden-code
 
@@ -131,9 +125,7 @@ Add suitable directions (`.up`, `.left`, etc.) to `directions` array and set sui
 //#-code-completion(currentmodule, hide)
 //#-code-completion(literal, show, array)
 //#-code-completion(identifier, show, UISwipeGestureRecognizerDirection, ., up, down, left, right)
-	// CCHANGE
-	//let directions: [UISwipeGestureRecognizerDirection] = /*#-editable-code Tap to enter code*/<#T##directions##Array#>/*#-end-editable-code*/
-	let directions: [UISwipeGestureRecognizerDirection] = [.left, .right, .up, .down]
+	let directions: [UISwipeGestureRecognizerDirection] = /*#-editable-code Tap to enter code*/<#T##directions##Array#>/*#-end-editable-code*/
 	for direction in directions {    // add four directions' swipe gesture
 		let gesture = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture))
 		gesture.direction = direction
@@ -141,8 +133,7 @@ Add suitable directions (`.up`, `.left`, etc.) to `directions` array and set sui
 	}
 
 	let tap = UITapGestureRecognizer(target: self, action: #selector(self.respondToDoubleTapped))
-	// CCHANGE
-	//tap.numberOfTapsRequired = /*#-editable-code*/<#T##number of taps##Int#>/*#-end-editable-code*/
+	tap.numberOfTapsRequired = /*#-editable-code*/<#T##number of taps##Int#>/*#-end-editable-code*/
 	tap.numberOfTapsRequired = 2
 	self.view.addGestureRecognizer(tap)
 
@@ -224,46 +215,12 @@ func respondToSwipeGesture(gesture: UIGestureRecognizer) {
 	if let swipeGesture = gesture as? UISwipeGestureRecognizer {
 		let direction = swipeGesture.direction      // swipe direction may be .left, .right, .up and .down
 		//#-editable-code Tap to enter code
-		// CCHANGE
-		switch direction {
-		case [.right]:
-			print("Swiped right")
-			mainLabel.text = "Right..."
-			move(Operation.turnRight)
-			speak("Turn right")
-			break
-		case [.down]:
-			print("Swiped down")
-			mainLabel.text = "Down..."
-			move(Operation.backward)
-			speak("Go backward")
-			break
-		case [.left]:
-			print("Swiped left")
-			mainLabel.text = "Left..."
-			move(Operation.turnLeft)
-			speak("Turn left")
-			break
-		case [.up]:
-			print("Swiped up")
-			mainLabel.text = "Up..."
-			move(Operation.forward)
-			speak("Go forward")
-			break
-		default:
-			break
-		}
 		//#-end-editable-code
 	}
 }
 
 func respondToDoubleTapped() {
 	//#-editable-code Tap to enter code
-	// CCHANGE
-	print("Double tapped")
-	mainLabel.text = "Stop..."
-	move(Operation.stop)
-	speak("Stop")
 	//#-end-editable-code
 }
 
