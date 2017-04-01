@@ -1,5 +1,5 @@
 /*:
-# Welcome to Play Car! 😊
+# Welcome to Co-Car! 😊
 
 In this Playground, you are going to be guided to connect and control your real model car, which based on [Arduino](glossary://Arduino), with [Bluetooth low energy](glossary://BLE) through Swift code, and also become a real developer and design and develop a controller user interface that your friends and family can play with easily! Furthermore, try to make it an autonomous car!
 
