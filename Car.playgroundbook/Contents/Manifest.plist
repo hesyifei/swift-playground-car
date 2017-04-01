@@ -12,6 +12,8 @@
 	<string>com.arefly.Car</string>
 	<key>DeploymentTarget</key>
 	<string>ios10.0</string>
+	<key>ImageReference</key>
+	<string>Icon.png</string>
 	<key>Chapters</key>
 	<array>
 		<string>Chapter1.playgroundchapter</string>
