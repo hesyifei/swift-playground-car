@@ -7,7 +7,7 @@
 	<key>ContentVersion</key>
 	<string>1.0</string>
 	<key>Name</key>
-	<string>Car</string>
+	<string>Co-Car</string>
 	<key>ContentIdentifier</key>
 	<string>com.arefly.Car</string>
 	<key>DeploymentTarget</key>
