@@ -134,8 +134,12 @@ The following are some function that you may found useful.
 func startTimer() {
 	timer = Timer.scheduledTimer(withTimeInterval: /*#-editable-code */0.1/*#-end-editable-code */, repeats: true) { (_) in
 		// code following will be run every `TimeInterval` seconds.
-		self.mainLabel.text = "\(self.getCurrentDistanceInFront()) cm"
 		//#-hidden-code
+		var unit = "px"
+		if UserDefaults.standard.bool(forKey: "hasRealCar") {
+			unit = "cm"
+		}
+		self.mainLabel.text = "\(self.getCurrentDistanceInFront()) \(unit)"
 		self.timeNeedToWait = 0.0
 		//#-end-hidden-code
 		//#-code-completion(everything, hide)
